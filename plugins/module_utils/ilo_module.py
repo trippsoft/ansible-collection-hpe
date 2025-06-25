@@ -82,7 +82,7 @@ else:
             assert_hostname: bool = self.params['validate_certs']
 
             self.client = redfish.RedfishClient(
-                base_url=self.params['base_uri'],
+                base_url=self.params['base_url'],
                 username=self.params['username'],
                 password=self.params['password'],
                 cert_reqs=cert_reqs,
