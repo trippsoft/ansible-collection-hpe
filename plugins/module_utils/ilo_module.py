@@ -134,12 +134,12 @@ else:
 
             return member['@odata.id']
 
-        def get_manager_date_time_uri(self) -> str:
+        def get_manager_date_time_service_uri(self) -> str:
             """
-            Get the manager date time URI from the Redfish client.
+            Get the manager date time service URI from the Redfish client.
 
             Returns:
-                str: The manager date time URI.
+                str: The manager date time service URI.
             """
 
             if not self.client:
@@ -170,13 +170,13 @@ else:
 
             links: dict = hpe['Links']
 
-            if 'DateTime' not in links:
-                self.handle_error(iLOModuleError(message='No DateTime found in manager Hpe Links'))
+            if 'DateTimeService' not in links:
+                self.handle_error(iLOModuleError(message='No DateTimeService found in manager Hpe Links'))
 
-            date_time: dict = links['DateTime']
+            date_time: dict = links['DateTimeService']
 
             if '@odata.id' not in date_time:
-                self.handle_error(iLOModuleError(message='No @odata.id found in manager Hpe Links DateTime'))
+                self.handle_error(iLOModuleError(message='No @odata.id found in manager Hpe Links DateTimeService'))
 
             return date_time['@odata.id']
 

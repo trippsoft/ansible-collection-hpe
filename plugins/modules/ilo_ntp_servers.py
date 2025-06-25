@@ -217,7 +217,7 @@ else:
 
             use_dhcpv6: bool = dhcpv6['UseNTPServers']
 
-            date_time_uri: str = self.get_manager_date_time_uri()
+            date_time_uri: str = self.get_manager_date_time_service_uri()
 
             try:
                 response: RestResponse = self.client.get(date_time_uri)
@@ -283,7 +283,7 @@ else:
             if not self.client:
                 self.fail_json(msg='Redfish client is not initialized')
 
-            date_time_uri: str = self.get_manager_date_time_uri()
+            date_time_uri: str = self.get_manager_date_time_service_uri()
 
             payload: dict = dict(StaticNTPServers=ntp_servers)
 
