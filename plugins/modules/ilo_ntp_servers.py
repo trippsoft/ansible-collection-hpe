@@ -366,8 +366,9 @@ def run_module() -> None:
         if not module.check_mode:
             module.set_ntp_use_dhcp(use_dhcp)
 
-    if (not use_dhcp and (current_ntp_servers[0] != ntp_servers[0] or
-                    current_ntp_servers[1] != ntp_servers[1])):
+    if (not use_dhcp and
+        (current_ntp_servers[0] != ntp_servers[0] or
+         current_ntp_servers[1] != ntp_servers[1])):
 
         result["changed"] = True
 
