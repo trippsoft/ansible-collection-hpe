@@ -107,7 +107,7 @@ except ImportError:
                 *args,
                 argument_spec=ARGSPEC.copy(),
                 required_if=[
-                    ('use_dhcp', False, ('dns_servers'))
+                    ('use_dhcp', False, ['dns_servers'])
                 ],
                 supports_check_mode=True,
                 **kwargs
