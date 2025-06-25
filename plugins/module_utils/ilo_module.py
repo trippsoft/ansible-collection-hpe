@@ -12,7 +12,7 @@ from ansible.module_utils.common.text.converters import to_native
 from typing import List, Optional
 
 COMMON_ARGSPEC: dict = dict(
-    base_uri=dict(type='str', required=True),
+    base_url=dict(type='str', required=True),
     username=dict(type='str', required=True),
     password=dict(type='str', required=True, no_log=True),
     validate_certs=dict(type='bool', default=True)
@@ -231,5 +231,5 @@ else:
 
             if len(members) == 0:
                 self.handle_error(iLOModuleError(message='Empty members found in manager Ethernet collection'))
-                
+
             return members[0]['@odata.id']

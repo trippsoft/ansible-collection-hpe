@@ -131,7 +131,7 @@ except ImportError:
                 use_dhcp (bool): Whether to use DHCP for NTP server configuration.
             """
 
-            use_dhcp = use_dhcp
+            _ = use_dhcp
             pass
 
         def set_ntp_servers(self, ntp_servers: List[str]) -> None:
@@ -142,7 +142,7 @@ except ImportError:
                 ntp_servers (List[str]): The list of NTP servers to set.
             """
 
-            ntp_servers = ntp_servers
+            _ = ntp_servers
             pass
 
 else:
@@ -237,7 +237,7 @@ else:
                 use_dhcpv4=use_dhcpv4,
                 use_dhcpv6=use_dhcpv6
             )
-        
+
         def set_ntp_use_dhcp(self, use_dhcp: bool) -> None:
             """
             Set whether to use DHCP for NTP server configuration in the Redfish client.
@@ -367,7 +367,7 @@ def run_module() -> None:
             module.set_ntp_use_dhcp(use_dhcp)
 
     if (not use_dhcp and (current_ntp_servers[0] != ntp_servers[0] or
-            current_ntp_servers[1] != ntp_servers[1])):
+                current_ntp_servers[1] != ntp_servers[1])):
 
         result["changed"] = True
 

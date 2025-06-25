@@ -114,7 +114,7 @@ except ImportError:
             """
 
             pass
-        
+
         def set_domain_name_use_dhcp(self, use_dhcp: bool) -> None:
             """
             Set the manager Ethernet domain name use DHCP in the Redfish client.
@@ -123,7 +123,7 @@ except ImportError:
                 use_dhcp (bool): Whether to use DHCP for the domain name.
             """
 
-            use_dhcp = use_dhcp
+            _ = use_dhcp
             pass
 
         def set_domain_name(self, domain_name: str) -> None:
@@ -134,7 +134,7 @@ except ImportError:
                 domain_name (str): The domain name to set.
             """
 
-            domain_name = domain_name
+            _ = domain_name
             pass
 
 else:
@@ -199,7 +199,7 @@ else:
                 domain_name=domain_name,
                 use_dhcp=use_dhcp
             )
-        
+
         def set_domain_name_use_dhcp(self, use_dhcp: bool) -> None:
             """
             Set the manager Ethernet domain name use DHCP in the Redfish client.
@@ -284,7 +284,7 @@ def run_module() -> None:
         module.fail_json(
             msg='The domain_name parameter cannot be specified when use_dhcp is set to true.'
         )
-    
+
     if domain_name is not None:
         for label in domain_name.split('.'):
             if not validate_hostname(label):

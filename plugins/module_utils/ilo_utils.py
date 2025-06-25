@@ -6,7 +6,7 @@ from __future__ import (absolute_import, division, print_function)
 def validate_hostname(hostname: str) -> bool:
     """
     Validate if the given string is a valid hostname.
-    
+
     :param hostname: The hostname to validate.
     :return: True if valid, False otherwise.
     """
@@ -23,7 +23,7 @@ def validate_hostname(hostname: str) -> bool:
 def validate_ipv4(ip: str) -> bool:
     """
     Validate if the given string is a valid IPv4 address.
-    
+
     :param ip: The IP address to validate.
     :return: True if valid, False otherwise.
     """
@@ -42,7 +42,7 @@ def validate_ipv4(ip: str) -> bool:
 def validate_ipv6(ip: str) -> bool:
     """
     Validate if the given string is a valid IPv6 address.
-    
+
     :param ip: The IP address to validate.
     :return: True if valid, False otherwise.
     """
@@ -61,7 +61,7 @@ def validate_ipv6(ip: str) -> bool:
             value: int = int(part, 16)
         except ValueError:
             return False
-        
+
         if value < 0 or value > 0xFFFF:
             return False
 

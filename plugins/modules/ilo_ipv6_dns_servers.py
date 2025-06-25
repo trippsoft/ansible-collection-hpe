@@ -130,7 +130,7 @@ except ImportError:
                 use_dhcp (bool): Whether to use DHCP for IPv6 DNS server configuration.
             """
 
-            use_dhcp = use_dhcp
+            _ = use_dhcp
             pass
 
         def set_ipv6_dns_servers(self, dns_servers: List[str]) -> None:
@@ -141,7 +141,7 @@ except ImportError:
                 dns_servers (List[str]): The list of DNS servers to set.
             """
 
-            dns_servers = dns_servers
+            _ = dns_servers
             pass
 
 else:
@@ -211,7 +211,7 @@ else:
                 dns_servers=dns_servers,
                 use_dhcp=use_dhcp
             )
-        
+
         def set_ipv6_use_dhcp(self, use_dhcp: bool) -> None:
             """
             Set whether to use DHCP for IPv6 DNS server configuration in the Redfish client.
@@ -345,8 +345,8 @@ def run_module() -> None:
             module.set_ipv6_use_dhcp(use_dhcp)
 
     if (not use_dhcp and (current_dns_servers[0] != dns_servers[0] or
-            current_dns_servers[1] != dns_servers[1] or
-            current_dns_servers[2] != dns_servers[2])):
+                current_dns_servers[1] != dns_servers[1] or
+                current_dns_servers[2] != dns_servers[2])):
 
         result["changed"] = True
 

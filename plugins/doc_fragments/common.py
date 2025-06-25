@@ -21,7 +21,6 @@ class ModuleDocFragment(object):
       password:
         type: str
         required: true
-        no_log: true
         description:
           - The password to authenticate with the HPE iLO.
       validate_certs:
