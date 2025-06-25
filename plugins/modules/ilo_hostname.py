@@ -86,7 +86,7 @@ except ImportError:
                 hostname (str): The hostname to set.
             """
 
-            _ = hostname
+            discard = hostname
             pass
 
 else:
@@ -169,8 +169,8 @@ def run_module() -> None:
     if not validate_hostname(hostname):
         module.fail_json(
             msg='Invalid hostname format.  ' +
-              'The hostname must be a valid DNS name, which can only include letters, numbers, and hyphens, and must not exceed 63 characters in length.'
-            )
+                'The hostname must be a valid DNS name, which can only include letters, numbers, and hyphens, and must not exceed 63 characters in length.'
+        )
 
     module.initialize_client()
 

@@ -131,7 +131,7 @@ except ImportError:
                 use_dhcp (bool): Whether to use DHCP for NTP server configuration.
             """
 
-            _ = use_dhcp
+            discard = use_dhcp
             pass
 
         def set_ntp_servers(self, ntp_servers: List[str]) -> None:
@@ -142,7 +142,7 @@ except ImportError:
                 ntp_servers (List[str]): The list of NTP servers to set.
             """
 
-            _ = ntp_servers
+            discard = ntp_servers
             pass
 
 else:
@@ -367,7 +367,7 @@ def run_module() -> None:
             module.set_ntp_use_dhcp(use_dhcp)
 
     if (not use_dhcp and (current_ntp_servers[0] != ntp_servers[0] or
-                current_ntp_servers[1] != ntp_servers[1])):
+                    current_ntp_servers[1] != ntp_servers[1])):
 
         result["changed"] = True
 

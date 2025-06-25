@@ -130,7 +130,7 @@ except ImportError:
                 use_dhcp (bool): Whether to use DHCP for IPv6 DNS server configuration.
             """
 
-            _ = use_dhcp
+            discard = use_dhcp
             pass
 
         def set_ipv6_dns_servers(self, dns_servers: List[str]) -> None:
@@ -141,7 +141,7 @@ except ImportError:
                 dns_servers (List[str]): The list of DNS servers to set.
             """
 
-            _ = dns_servers
+            discard = dns_servers
             pass
 
 else:
@@ -345,8 +345,8 @@ def run_module() -> None:
             module.set_ipv6_use_dhcp(use_dhcp)
 
     if (not use_dhcp and (current_dns_servers[0] != dns_servers[0] or
-                current_dns_servers[1] != dns_servers[1] or
-                current_dns_servers[2] != dns_servers[2])):
+                    current_dns_servers[1] != dns_servers[1] or
+                    current_dns_servers[2] != dns_servers[2])):
 
         result["changed"] = True
 

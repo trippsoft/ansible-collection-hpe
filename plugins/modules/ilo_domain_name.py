@@ -123,7 +123,7 @@ except ImportError:
                 use_dhcp (bool): Whether to use DHCP for the domain name.
             """
 
-            _ = use_dhcp
+            discard = use_dhcp
             pass
 
         def set_domain_name(self, domain_name: str) -> None:
@@ -134,7 +134,7 @@ except ImportError:
                 domain_name (str): The domain name to set.
             """
 
-            _ = domain_name
+            discard = domain_name
             pass
 
 else:
