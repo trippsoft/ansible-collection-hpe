@@ -207,13 +207,13 @@ else:
 
             use_dhcpv4: bool = dhcpv4['UseNTPServers']
 
-            if 'DHCPv6' in hpe:
-                self.handle_error(iLOModuleError(message='DHCPv6 is not supported in this module'))
+            if 'DHCPv6' not in hpe:
+                self.handle_error(iLOModuleError(message='No DHCPv6 found in manager Ethernet Oem Hpe'))
 
             dhcpv6: dict = hpe['DHCPv6']
 
-            if 'UseNTPServers' in dhcpv6:
-                self.handle_error(iLOModuleError(message='UseNTPServers in DHCPv6 is not supported in this module'))
+            if 'UseNTPServers' not in dhcpv6:
+                self.handle_error(iLOModuleError(message='No UseNTPServers found in manager Ethernet Oem Hpe DHCPv6'))
 
             use_dhcpv6: bool = dhcpv6['UseNTPServers']
 

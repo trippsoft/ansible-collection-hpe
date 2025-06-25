@@ -331,6 +331,7 @@ def run_module() -> None:
     if not current_use_dhcp:
         result["diff"]["before"]["dns_servers"] = current_dns_servers
 
+    result["diff"]["after"]["use_dhcp"] = use_dhcp
     result["use_dhcp"] = use_dhcp
 
     if not use_dhcp:
