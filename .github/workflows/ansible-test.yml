@@ -1,0 +1,57 @@
+---
+name: ansible-test
+'on':
+  workflow_call: {}
+  workflow_dispatch: {}
+  pull_request:
+    branches:
+      - main
+    paths:
+      - galaxy.yml
+      - plugins/doc_fragments/*.py
+      - plugins/module_utils/*.yml
+      - plugins/module_utils/*.py
+      - plugins/modules/*.py
+      - plugins/modules/*.yml
+  push:
+    branches:
+      - main
+    paths:
+      - galaxy.yml
+      - plugins/doc_fragments/*.py
+      - plugins/module_utils/*.yml
+      - plugins/module_utils/*.py
+      - plugins/modules/*.py
+      - plugins/modules/*.yml
+defaults:
+  run:
+    working-directory: 'collections/ansible_collections/trippsc2/hpe'
+jobs:
+  sanity:
+    name: Run ansible-test
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+    strategy:
+      fail-fast: false
+      matrix:
+        ansible_version:
+          - '2.18'
+          - '2.17'
+          - '2.16'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: 'collections/ansible_collections/trippsc2/hpe'
+      - name: Run ansible-test sanity tests
+        working-directory: 'collections/ansible_collections/trippsc2/hpe'
+        run: |
+          source ~/venv/ansible-2.16/bin/activate
+          ansible-galaxy collection install community.hpe
+          ln -s ~/.ansible/collections/ansible_collections/community ../../community
+          deactivate
+          source ~/venv/ansible-test-${{ matrix.ansible_version }}/bin/activate
+          ansible-test sanity -v --docker
+          deactivate
