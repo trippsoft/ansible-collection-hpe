@@ -23,10 +23,4 @@ class ModuleDocFragment(object):
         required: true
         description:
           - The password to authenticate with the HPE iLO.
-      validate_certs:
-        type: bool
-        required: false
-        default: true
-        description:
-          - Whether to validate SSL certificates.
     """

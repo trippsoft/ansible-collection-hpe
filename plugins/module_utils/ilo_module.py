@@ -15,7 +15,6 @@ COMMON_ARGSPEC: dict = dict(
     base_url=dict(type='str', required=True),
     username=dict(type='str', required=True),
     password=dict(type='str', required=True, no_log=True),
-    validate_certs=dict(type='bool', default=True)
 )
 
 try:
@@ -78,15 +77,10 @@ else:
             Initialize the Redfish client.
             """
 
-            cert_reqs: str = 'CERT_REQUIRED' if self.params['validate_certs'] else 'CERT_NONE'
-            assert_hostname: bool = self.params['validate_certs']
-
             self.client = redfish.RedfishClient(
                 base_url=self.params['base_url'],
                 username=self.params['username'],
                 password=self.params['password'],
-                cert_reqs=cert_reqs,
-                assert_hostname=assert_hostname
             )
 
             try:
