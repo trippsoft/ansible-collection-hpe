@@ -188,7 +188,17 @@ else:
             if 'UseDomainName' not in dhcpv4:
                 self.handle_error(iLOModuleError(message='No UseDomainName found in Hpe manager Ethernet Oem'))
 
-            use_dhcp: bool = dhcpv4['UseDomainName']
+            use_dhcpv4: bool = dhcpv4['UseDomainName']
+
+            if 'DHCPv6' not in hpe:
+                self.handle_error(iLOModuleError(message='No DHCPv6 found in Hpe manager Ethernet Oem'))
+
+            dhcpv6: dict = hpe['DHCPv6']
+
+            if 'UseDomainName' not in dhcpv6:
+                self.handle_error(iLOModuleError(message='No UseDomainName found in Hpe manager Ethernet Oem'))
+
+            use_dhcpv6: bool = dhcpv6['UseDomainName']
 
             if 'DomainName' not in hpe:
                 self.handle_error(iLOModuleError(message='No DomainName found in Hpe manager Ethernet Oem'))
@@ -197,7 +207,8 @@ else:
 
             return dict(
                 domain_name=domain_name,
-                use_dhcp=use_dhcp
+                use_dhcpv4=use_dhcpv4,
+                use_dhcpv6=use_dhcpv6
             )
 
         def set_domain_name_use_dhcp(self, use_dhcp: bool) -> None:
@@ -217,6 +228,9 @@ else:
                 Oem=dict(
                     Hpe=dict(
                         DHCPv4=dict(
+                            UseDomainName=use_dhcp
+                        ),
+                        DHCPv6=dict(
                             UseDomainName=use_dhcp
                         )
                     )
@@ -302,20 +316,23 @@ def run_module() -> None:
     current_domain_name_config: dict = module.get_domain_name_config()
 
     current_domain_name: str = current_domain_name_config['domain_name']
-    current_use_dhcp: bool = current_domain_name_config['use_dhcp']
+    current_use_dhcpv4: bool = current_domain_name_config['use_dhcpv4']
+    current_use_dhcpv6: bool = current_domain_name_config['use_dhcpv6']
 
-    result["diff"]["before"]["use_dhcp"] = current_use_dhcp
+    result["diff"]["before"]["use_dhcpv4"] = current_use_dhcpv4
+    result["diff"]["before"]["use_dhcpv6"] = current_use_dhcpv6
 
-    if not current_use_dhcp:
+    if not current_use_dhcpv4 or not current_use_dhcpv6:
         result["diff"]["before"]["domain_name"] = current_domain_name
 
-    result["diff"]["after"]["use_dhcp"] = use_dhcp
+    result["diff"]["after"]["use_dhcpv4"] = use_dhcp
+    result["diff"]["after"]["use_dhcpv6"] = use_dhcp
 
     if not use_dhcp:
         result["diff"]["after"]["domain_name"] = domain_name
         result["domain_name"] = domain_name
 
-    if current_use_dhcp != use_dhcp:
+    if current_use_dhcpv4 != use_dhcp or current_use_dhcpv6 != use_dhcp:
 
         result["changed"] = True
 

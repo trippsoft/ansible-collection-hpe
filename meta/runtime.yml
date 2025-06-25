@@ -1,2 +1,10 @@
 ---
 requires_ansible: '>=2.16.0'
+
+action_groups:
+  ilo:
+    - ilo_domain_name
+    - ilo_hostname
+    - ilo_ipv4_dns_servers
+    - ilo_ipv6_dns_servers
+    - ilo_ntp_servers
