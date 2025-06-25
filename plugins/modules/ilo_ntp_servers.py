@@ -160,7 +160,7 @@ else:
                 *args,
                 argument_spec=ARGSPEC.copy(),
                 required_if=[
-                    ('use_dhcp', False, ('ntp_servers'))
+                    ('use_dhcp', False, ['ntp_servers'])
                 ],
                 supports_check_mode=True,
                 **kwargs

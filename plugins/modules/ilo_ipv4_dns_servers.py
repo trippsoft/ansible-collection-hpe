@@ -160,7 +160,7 @@ else:
                 *args,
                 argument_spec=ARGSPEC.copy(),
                 required_if=[
-                    ('use_dhcp', False, ('dns_servers'))
+                    ('use_dhcp', False, ['dns_servers'])
                 ],
                 supports_check_mode=True,
                 **kwargs
@@ -355,9 +355,10 @@ def run_module() -> None:
         if not module.check_mode:
             module.set_ipv4_dns_use_dhcp(use_dhcp)
 
-    if (not use_dhcp and (current_dns_servers[0] != dns_servers[0] or
-                    current_dns_servers[1] != dns_servers[1] or
-                    current_dns_servers[2] != dns_servers[2])):
+    if (not use_dhcp and
+        (current_dns_servers[0] != dns_servers[0] or
+         current_dns_servers[1] != dns_servers[1] or
+         current_dns_servers[2] != dns_servers[2])):
 
         result["changed"] = True
 
