@@ -327,6 +327,7 @@ def run_module() -> None:
 
     result["diff"]["after"]["use_dhcpv4"] = use_dhcp
     result["diff"]["after"]["use_dhcpv6"] = use_dhcp
+    result["use_dhcp"] = use_dhcp
 
     if not use_dhcp:
         result["diff"]["after"]["domain_name"] = domain_name
