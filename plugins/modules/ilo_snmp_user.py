@@ -594,7 +594,7 @@ def run_module() -> None:
         else:
             changes_needed: dict = module.get_changes_needed(current_user, desired_config)
 
-            if changes_needed:
+            if len(changes_needed) > 0:
 
                 returned_user: dict = current_user.copy()
                 returned_user.update(changes_needed)
