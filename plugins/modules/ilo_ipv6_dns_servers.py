@@ -352,6 +352,7 @@ def run_module() -> None:
         if not module.check_mode:
             module.set_ipv6_dns_servers(dns_servers)
 
+    module.logout()
     module.exit_json(**result)
 
 

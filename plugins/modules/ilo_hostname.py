@@ -194,6 +194,7 @@ def run_module() -> None:
 
         result["changed"] = True
 
+    module.logout()
     module.exit_json(**result)
 
 

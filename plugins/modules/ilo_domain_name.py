@@ -342,6 +342,7 @@ def run_module() -> None:
         if not module.check_mode:
             module.set_domain_name(domain_name)
 
+    module.logout()
     module.exit_json(**result)
 
 
