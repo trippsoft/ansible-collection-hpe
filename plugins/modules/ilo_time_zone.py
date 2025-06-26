@@ -149,7 +149,7 @@ except ImportError:
             return dict(
                 name=time_zone['Name'],
                 index=time_zone['Index'],
-                utc_offset=time_zone['UTCOffset'],
+                utc_offset=time_zone['UtcOffset'],
                 value=time_zone['Value']
             )
 
@@ -240,7 +240,7 @@ else:
             return dict(
                 name=time_zone['Name'],
                 index=time_zone['Index'],
-                utc_offset=time_zone['UTCOffset'],
+                utc_offset=time_zone['UtcOffset'],
                 value=time_zone['Value']
             )
 
