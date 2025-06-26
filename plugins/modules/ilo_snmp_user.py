@@ -453,7 +453,7 @@ else:
                 self.fail_json(msg='Redfish client is not initialized')
 
             snmp_users_uri: str = self.get_manager_snmp_users_uri()
-            snmp_user_uri: str = snmp_users_uri + '/' + changes['index']
+            snmp_user_uri: str = snmp_users_uri + '/' + str(changes['index'])
 
             payload: dict = dict()
 
