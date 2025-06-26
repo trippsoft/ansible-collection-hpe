@@ -359,6 +359,10 @@ else:
 
             desired_config: dict = self.params.copy()
 
+            for key, value in desired_config.items():
+                if value is None:
+                    del desired_config[key]
+
             for key in COMMON_ARGSPEC.keys():
                 if key in desired_config:
                     del desired_config[key]
