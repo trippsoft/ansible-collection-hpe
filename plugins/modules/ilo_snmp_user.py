@@ -154,7 +154,7 @@ MODULE_INIT_ARGS: dict = dict(
         auth_passphrase=dict(type='str', required=False, no_log=True),
         priv_protocol=dict(type='str', required=False, choices=['aes']),
         priv_passphrase=dict(type='str', required=False, no_log=True),
-        update_passphrase=dict(type='str', required=False, default='on_create', choices=['on_create', 'always']),
+        update_passphrase=dict(type='str', required=False, default='on_create', choices=['on_create', 'always'], no_log=False),
         user_engine_id=dict(type='str', required=False),
         state=dict(type='str', required=False, default='present', choices=['present', 'absent'])
     ),
