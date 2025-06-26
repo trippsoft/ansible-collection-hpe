@@ -9,7 +9,7 @@ module: ilo_snmp_user
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Configures iLO SNMP user settings.
+short_description: Configures iLO SNMP user settings
 description:
   - >-
     This module configures the SNMP user settings for an HPE iLO device.

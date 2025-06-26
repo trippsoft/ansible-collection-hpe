@@ -1,5 +1,6 @@
 plugins/modules/ilo_domain_name.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_https_certificate_info.py validate-modules:missing-gplv3-license
+plugins/modules/ilo_https_csr.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_hostname.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_ipv4_dns_servers.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_ipv6_dns_servers.py validate-modules:missing-gplv3-license

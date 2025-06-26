@@ -9,7 +9,7 @@ module: ilo_ipv6_dns_servers
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Configures iLO IPv6 DNS servers.
+short_description: Configures iLO IPv6 DNS servers
 description:
   - >-
     This module configures the IPv6 DNS servers for an HPE iLO device.

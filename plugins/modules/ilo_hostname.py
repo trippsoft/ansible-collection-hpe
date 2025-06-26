@@ -9,7 +9,7 @@ module: ilo_hostname
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Configures iLO hostname.
+short_description: Configures iLO hostname
 description:
   - >-
     This module configures the hostname for an HPE iLO device.

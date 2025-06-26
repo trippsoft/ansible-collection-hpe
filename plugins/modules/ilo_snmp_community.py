@@ -9,10 +9,10 @@ module: ilo_snmp_community
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Configures iLO SNMP community strings.  This only configures request community strings.
+short_description: Configures iLO SNMP community strings
 description:
   - >-
-    This module configures the SNMP community strings for an HPE iLO device.
+    This module configures the SNMP community strings for an HPE iLO device.  This only configures request community strings.
 extends_documentation_fragment:
   - trippsc2.hpe.action_group
   - trippsc2.hpe.check_mode

@@ -316,6 +316,78 @@ else:
 
             return https_certificate['@odata.id']
 
+        def get_https_cert_generate_csr_uri(self) -> str:
+            """
+            Get the HTTPS certificate generate CSR URI from the Redfish client.
+
+            Returns:
+                str: The HTTPS certificate generate CSR URI.
+            """
+
+            if not self.client:
+                self.fail_json(msg='Redfish client is not initialized')
+
+            https_certificate_uri: str = self.get_manager_security_https_cert_uri()
+
+            try:
+                response: RestResponse = self.client.get(https_certificate_uri)
+            except Exception as e:
+                self.handle_error(iLOModuleError(message=f'Error retrieving {https_certificate_uri}', exception=to_native(e)))
+
+            if response.status != 200:
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {https_certificate_uri}'))
+
+            if 'Actions' not in response.dict:
+                self.handle_error(iLOModuleError(message=f'\'Actions\' not found in {https_certificate_uri}'))
+
+            actions: dict = response.dict['Actions']
+
+            if '#HpeHttpsCert.GenerateCSR' not in actions:
+                self.handle_error(iLOModuleError(message=f'\'Actions.#HpeHttpsCert.GenerateCSR\' not found in {https_certificate_uri}'))
+
+            generate_csr: dict = actions['#HpeHttpsCert.GenerateCSR']
+
+            if '@odata.id' not in generate_csr:
+                self.handle_error(iLOModuleError(message=f'\'Actions.#HpeHttpsCert.GenerateCSR.@odata.id\' not found in {https_certificate_uri}'))
+
+            return generate_csr['@odata.id']
+
+        def get_https_cert_import_certificate_uri(self) -> str:
+            """
+            Get the HTTPS certificate import certificate URI from the Redfish client.
+
+            Returns:
+                str: The HTTPS certificate import certificate URI.
+            """
+
+            if not self.client:
+                self.fail_json(msg='Redfish client is not initialized')
+
+            https_certificate_uri: str = self.get_manager_security_https_cert_uri()
+
+            try:
+                response: RestResponse = self.client.get(https_certificate_uri)
+            except Exception as e:
+                self.handle_error(iLOModuleError(message=f'Error retrieving {https_certificate_uri}', exception=to_native(e)))
+
+            if response.status != 200:
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {https_certificate_uri}'))
+
+            if 'Actions' not in response.dict:
+                self.handle_error(iLOModuleError(message=f'\'Actions\' not found in {https_certificate_uri}'))
+
+            actions: dict = response.dict['Actions']
+
+            if '#HpeHttpsCert.ImportCertificate' not in actions:
+                self.handle_error(iLOModuleError(message=f'\'Actions.#HpeHttpsCert.ImportCertificate\' not found in {https_certificate_uri}'))
+
+            import_certificate: dict = actions['#HpeHttpsCert.ImportCertificate']
+
+            if '@odata.id' not in import_certificate:
+                self.handle_error(iLOModuleError(message=f'\'Actions.#HpeHttpsCert.ImportCertificate.@odata.id\' not found in {https_certificate_uri}'))
+
+            return import_certificate['@odata.id']
+
         def get_manager_snmp_service_uri(self) -> str:
             """
             Get the manager SNMP service URI from the Redfish client.

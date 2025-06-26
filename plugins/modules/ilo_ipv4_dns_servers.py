@@ -9,7 +9,7 @@ module: ilo_ipv4_dns_servers
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Configures iLO IPv4 DNS servers.
+short_description: Configures iLO IPv4 DNS servers
 description:
   - >-
     This module configures the IPv4 DNS servers for an HPE iLO device.

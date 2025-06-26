@@ -9,7 +9,7 @@ module: ilo_https_certificate_info
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Retrieves iLO HTTPS certificate information.
+short_description: Retrieves iLO HTTPS certificate information
 description:
   - >-
     This module retrieves the HTTPS certificate information for an HPE iLO device.

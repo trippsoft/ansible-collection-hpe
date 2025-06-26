@@ -9,10 +9,10 @@ module: ilo_ntp_servers
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Configures iLO IPv4 NTP servers.
+short_description: Configures iLO NTP servers.
 description:
   - >-
-    This module configures the IPv4 NTP servers for an HPE iLO device.
+    This module configures the NTP servers for an HPE iLO device.
 extends_documentation_fragment:
   - trippsc2.hpe.action_group
   - trippsc2.hpe.check_mode
@@ -23,7 +23,7 @@ options:
     required: false
     elements: str
     description:
-      - The list of IPv4 NTP servers to configure.
+      - The list of NTP servers to configure.
       - Each server should be specified as a string in dotted-decimal notation (e.g., "192.0.2.1").
       - The list must contain no more than three servers.
   use_dhcp:
@@ -39,7 +39,7 @@ options:
 """
 
 EXAMPLES = r"""
-- name: Configure iLO IPv4 NTP servers
+- name: Configure iLO NTP servers
   trippsc2.hpe.ilo_ntp_servers:
     url_base: '192.0.2.200'
     username: 'Administrator'
@@ -49,7 +49,7 @@ EXAMPLES = r"""
       - "192.0.2.2"
       - "192.0.2.3"
 
-- name: Configure iLO IPv4 NTP servers using DHCP
+- name: Configure iLO NTP servers using DHCP
   trippsc2.hpe.ilo_ntp_servers:
     url_base: '192.0.2.200'
     username: 'Administrator'
@@ -64,7 +64,7 @@ ntp_servers:
     O(ntp_servers) is provided
   elements: str
   description:
-    - The list of configured IPv4 NTP servers.
+    - The list of configured NTP servers.
 use_dhcp:
   type: bool
   returned: always
@@ -102,9 +102,9 @@ except ImportError:
     REDFISH_IMPORT_ERROR: Optional[str] = traceback.format_exc()
 
     # Stub class to allow ansible-test to run without Redfish
-    class iLOIPv4NTPServersModule(iLOModule):
+    class iLONTPServersModule(iLOModule):
         """
-        Extends iLOModule to simplify the creation of iLO IPv4 NTP servers modules.
+        Extends iLOModule to simplify the creation of iLO NTP servers modules.
         """
 
         def __init__(self, *args, **kwargs) -> None:
@@ -115,7 +115,7 @@ except ImportError:
             Get the manager Ethernet NTP servers from the Redfish client.
 
             Returns:
-                dict: The current IPv4 NTP server configuration, including NTP servers and whether DHCP is used.
+                dict: The current NTP server configuration, including NTP servers and whether DHCP is used.
             """
 
             pass
@@ -146,9 +146,9 @@ else:
     HAS_REDFISH: bool = True
     REDFISH_IMPORT_ERROR: Optional[str] = None
 
-    class iLOIPv4NTPServersModule(iLOModule):
+    class iLONTPServersModule(iLOModule):
         """
-        Extends iLOModule to simplify the creation of iLO IPv4 NTP servers modules.
+        Extends iLOModule to simplify the creation of iLO NTP servers modules.
         """
 
         def __init__(self, *args, **kwargs) -> None:
@@ -159,7 +159,7 @@ else:
             Get the manager Ethernet NTP servers from the Redfish client.
 
             Returns:
-                dict: The current IPv4 NTP server configuration, including NTP servers and whether DHCP is used.
+                dict: The current NTP server configuration, including NTP servers and whether DHCP is used.
             """
 
             if not self.client:
@@ -289,7 +289,7 @@ from ansible.module_utils.basic import missing_required_lib
 
 def run_module() -> None:
 
-    module: iLOIPv4NTPServersModule = iLOIPv4NTPServersModule()
+    module: iLONTPServersModule = iLONTPServersModule()
 
     if not HAS_REDFISH:
         module.fail_json(

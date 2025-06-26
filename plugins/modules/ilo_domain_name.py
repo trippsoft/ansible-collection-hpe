@@ -9,7 +9,7 @@ module: ilo_domain_name
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Configures iLO domain name.
+short_description: Configures iLO domain name
 description:
   - >-
     This module configures the domain name for an HPE iLO device.

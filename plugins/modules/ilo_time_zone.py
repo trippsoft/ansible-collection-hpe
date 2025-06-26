@@ -9,7 +9,7 @@ module: ilo_time_zone
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Configures iLO time zone settings.
+short_description: Configures iLO time zone settings
 description:
   - >-
     This module configures the time zone settings for an HPE iLO device.

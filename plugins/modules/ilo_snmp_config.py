@@ -9,7 +9,7 @@ module: ilo_snmp_config
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Configures iLO SNMP settings.
+short_description: Configures iLO SNMP settings
 description:
   - >-
     This module configures the SNMP settings for an HPE iLO device.  This module only configures general SNMP settings.
