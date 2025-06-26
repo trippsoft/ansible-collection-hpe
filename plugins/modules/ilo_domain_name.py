@@ -165,43 +165,43 @@ else:
             try:
                 response: RestResponse = self.client.get(manager_ethernet_uri)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error retrieving manager Ethernet hostname', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message=f'Error retrieving {manager_ethernet_uri}', exception=to_native(e)))
 
             if response.status != 200:
-                self.handle_error(iLOModuleError(message='Failed to retrieve manager Ethernet hostname'))
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {manager_ethernet_uri}'))
 
             if 'Oem' not in response.dict:
-                self.handle_error(iLOModuleError(message='No Oem found in manager Ethernet'))
+                self.handle_error(iLOModuleError(message=f'\'Oem\' is not found in {manager_ethernet_uri}'))
 
             oem: dict = response.dict['Oem']
 
             if 'Hpe' not in oem:
-                self.handle_error(iLOModuleError(message='No Hpe found in manager Ethernet Oem'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe\' is not found in {manager_ethernet_uri}'))
 
             hpe: dict = oem['Hpe']
 
             if 'DHCPv4' not in hpe:
-                self.handle_error(iLOModuleError(message='No DHCPv4 found in Hpe manager Ethernet Oem'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv4\' is not found in {manager_ethernet_uri}'))
 
             dhcpv4: dict = hpe['DHCPv4']
 
             if 'UseDomainName' not in dhcpv4:
-                self.handle_error(iLOModuleError(message='No UseDomainName found in Hpe manager Ethernet Oem'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv4.UseDomainName\' is not found in {manager_ethernet_uri}'))
 
             use_dhcpv4: bool = dhcpv4['UseDomainName']
 
             if 'DHCPv6' not in hpe:
-                self.handle_error(iLOModuleError(message='No DHCPv6 found in Hpe manager Ethernet Oem'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv6\' is not found in {manager_ethernet_uri}'))
 
             dhcpv6: dict = hpe['DHCPv6']
 
             if 'UseDomainName' not in dhcpv6:
-                self.handle_error(iLOModuleError(message='No UseDomainName found in Hpe manager Ethernet Oem'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv6.UseDomainName\' is not found in {manager_ethernet_uri}'))
 
             use_dhcpv6: bool = dhcpv6['UseDomainName']
 
             if 'DomainName' not in hpe:
-                self.handle_error(iLOModuleError(message='No DomainName found in Hpe manager Ethernet Oem'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DomainName\' is not found in {manager_ethernet_uri}'))
 
             domain_name: str = hpe['DomainName']
 
@@ -240,10 +240,10 @@ else:
             try:
                 response: RestResponse = self.client.patch(manager_ethernet_uri, payload)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error setting manager Ethernet domain name use DHCP', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message='Error occurred when configuring DHCP domain name behavior', exception=to_native(e)))
 
             if response.status not in [200, 204]:
-                self.handle_error(iLOModuleError(message='Failed to set manager Ethernet domain name use DHCP'))
+                self.handle_error(iLOModuleError(message='Failed to configure DHCP domain name behavior'))
 
         def set_domain_name(self, domain_name: str) -> None:
             """
@@ -269,10 +269,10 @@ else:
             try:
                 response: RestResponse = self.client.patch(manager_ethernet_uri, payload)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error setting manager Ethernet domain name', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message='Error occurred when configuring domain name', exception=to_native(e)))
 
             if response.status not in [200, 204]:
-                self.handle_error(iLOModuleError(message='Failed to set manager Ethernet domain name'))
+                self.handle_error(iLOModuleError(message='Failed to configure domain name'))
 
 
 from ansible.module_utils.basic import missing_required_lib
@@ -296,14 +296,14 @@ def run_module() -> None:
 
     if domain_name is not None and use_dhcp:
         module.fail_json(
-            msg='The domain_name parameter cannot be specified when use_dhcp is set to true.'
+            msg='The domain_name parameter cannot be specified when use_dhcp is set to true'
         )
 
     if domain_name is not None:
         for label in domain_name.split('.'):
             if not validate_hostname(label):
                 module.fail_json(
-                    msg=f'The domain name "{domain_name}" is not valid. Each label must be a valid hostname.'
+                    msg=f'The domain name "{domain_name}" is not valid. Each label must be a valid hostname'
                 )
 
     module.initialize_client()

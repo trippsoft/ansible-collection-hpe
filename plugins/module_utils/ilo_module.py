@@ -15,7 +15,7 @@ from typing import List, Optional
 COMMON_ARGSPEC: dict = dict(
     base_url=dict(type='str', required=True),
     username=dict(type='str', required=True),
-    password=dict(type='str', required=True, no_log=True),
+    password=dict(type='str', required=True, no_log=True)
 )
 
 try:

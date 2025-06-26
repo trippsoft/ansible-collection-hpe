@@ -172,38 +172,38 @@ else:
             try:
                 response: RestResponse = self.client.get(manager_ethernet_uri)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error retrieving manager Ethernet DNS servers', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message=f'Error retrieving {manager_ethernet_uri}', exception=to_native(e)))
 
             if response.status != 200:
-                self.handle_error(iLOModuleError(message='Failed to retrieve manager Ethernet DNS servers'))
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {manager_ethernet_uri}'))
 
             if 'Oem' not in response.dict:
-                self.handle_error(iLOModuleError(message='No Oem section found in manager Ethernet'))
+                self.handle_error(iLOModuleError(message=f'\'Oem\' is not found in {manager_ethernet_uri}'))
 
             oem: dict = response.dict['Oem']
 
             if 'Hpe' not in oem:
-                self.handle_error(iLOModuleError(message='No Hpe section found in manager Ethernet Oem'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe\' is not found in {manager_ethernet_uri}'))
 
             hpe: dict = oem['Hpe']
 
             if 'DHCPv6' not in hpe:
-                self.handle_error(iLOModuleError(message='No DHCPv6 section found in manager Ethernet Oem Hpe'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv6\' is not found in {manager_ethernet_uri}'))
 
             dhcpv6: dict = hpe['DHCPv6']
 
             if 'UseDNSServers' not in dhcpv6:
-                self.handle_error(iLOModuleError(message='No UseDNSServers found in manager Ethernet Oem Hpe DHCPv6'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv6.UseDNSServers\' is not found in {manager_ethernet_uri}'))
 
             use_dhcp: bool = dhcpv6['UseDNSServers']
 
             if 'IPv6' not in hpe:
-                self.handle_error(iLOModuleError(message='No IPv6 section found in manager Ethernet Oem Hpe'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.IPv6\' is not found in {manager_ethernet_uri}'))
 
             ipv6: dict = hpe['IPv6']
 
             if 'DNSServers' not in ipv6:
-                self.handle_error(iLOModuleError(message='No DNSServers found in manager Ethernet Oem Hpe IPv6'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.IPv6.DNSServers\' is not found in {manager_ethernet_uri}'))
 
             dns_servers: List[str] = ipv6['DNSServers']
 
@@ -238,10 +238,10 @@ else:
             try:
                 response: RestResponse = self.client.patch(manager_ethernet_uri, payload)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error setting manager Ethernet DHCPv6 UseDNSServers', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message='Error occurred when configuring DHCP DNS behavior', exception=to_native(e)))
 
             if response.status not in [200, 204]:
-                self.handle_error(iLOModuleError(message='Failed to set manager Ethernet DHCPv6 UseDNSServers'))
+                self.handle_error(iLOModuleError(message='Failed to configure DHCP DNS behavior'))
 
         def set_ipv6_dns_servers(self, dns_servers: List[str]) -> None:
             """
@@ -269,10 +269,10 @@ else:
             try:
                 response: RestResponse = self.client.patch(manager_ethernet_uri, payload)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error setting manager Ethernet DNS servers', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message='Error occurred when configuring IPv6 DNS servers', exception=to_native(e)))
 
             if response.status not in [200, 204]:
-                self.handle_error(iLOModuleError(message='Failed to set manager Ethernet DNS servers'))
+                self.handle_error(iLOModuleError(message='Failed to configure IPv6 DNS servers'))
 
 
 from ansible.module_utils.basic import missing_required_lib
@@ -295,7 +295,7 @@ def run_module() -> None:
         use_dhcp: bool = dns_servers is None
 
     if use_dhcp and dns_servers is not None:
-        module.fail_json(msg='Cannot specify dns_servers when use_dhcp is true.')
+        module.fail_json(msg='Cannot specify dns_servers when use_dhcp is true')
 
     if dns_servers is not None:
         for dns_server in dns_servers:
@@ -303,7 +303,7 @@ def run_module() -> None:
                 module.fail_json(msg=f'Invalid IPv6 address: {dns_server}')
 
         if (len(dns_servers) > 3):
-            module.fail_json(msg='The list of DNS servers must contain no more than three servers.')
+            module.fail_json(msg='The list of DNS servers must contain no more than three servers')
 
         if (len(dns_servers) == 0):
             dns_servers.append('::')

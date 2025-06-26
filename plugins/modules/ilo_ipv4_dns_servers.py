@@ -182,38 +182,38 @@ else:
             try:
                 response: RestResponse = self.client.get(manager_ethernet_uri)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error retrieving manager Ethernet DNS servers', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message=f'Error retrieving {manager_ethernet_uri}', exception=to_native(e)))
 
             if response.status != 200:
-                self.handle_error(iLOModuleError(message='Failed to retrieve manager Ethernet DNS servers'))
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {manager_ethernet_uri}'))
 
             if 'Oem' not in response.dict:
-                self.handle_error(iLOModuleError(message='No Oem found in manager Ethernet'))
+                self.handle_error(iLOModuleError(message=f'\'Oem\' is not found in {manager_ethernet_uri}'))
 
             oem: dict = response.dict['Oem']
 
             if 'Hpe' not in oem:
-                self.handle_error(iLOModuleError(message='No Hpe found in manager Ethernet Oem'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe\' is not found in {manager_ethernet_uri}'))
 
             hpe: dict = oem['Hpe']
 
             if 'DHCPv4' not in hpe:
-                self.handle_error(iLOModuleError(message='No DHCPv4 found in manager Ethernet Oem Hpe'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv4\' is not found in {manager_ethernet_uri}'))
 
             dhcpv4: dict = hpe['DHCPv4']
 
             if 'UseDNSServers' not in dhcpv4:
-                self.handle_error(iLOModuleError(message='No UseDNSServers found in manager Ethernet Oem Hpe DHCPv4'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv4.UseDNSServers\' is not found in {manager_ethernet_uri}'))
 
             use_dhcp: bool = dhcpv4['UseDNSServers']
 
             if 'IPv4' not in hpe:
-                self.handle_error(iLOModuleError(message='No IPv4 found in manager Ethernet Oem Hpe'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.IPv4\' is not found in {manager_ethernet_uri}'))
 
             ipv4: dict = hpe['IPv4']
 
             if 'DNSServers' not in ipv4:
-                self.handle_error(iLOModuleError(message='No DNSServers found in manager Ethernet Oem Hpe IPv4'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.IPv4.DNSServers\' is not found in {manager_ethernet_uri}'))
 
             dns_servers: List[str] = ipv4['DNSServers']
 
@@ -248,10 +248,10 @@ else:
             try:
                 response: RestResponse = self.client.patch(manager_ethernet_uri, payload)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error setting manager Ethernet IPv4 UseDNSServers', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message='Error occurred when configuring DHCP DNS behavior', exception=to_native(e)))
 
             if response.status not in [200, 204]:
-                self.handle_error(iLOModuleError(message='Failed to set manager Ethernet IPv4 UseDNSServers'))
+                self.handle_error(iLOModuleError(message='Failed to configure DHCP DNS behavior'))
 
         def set_ipv4_dns_servers(self, dns_servers: List[str]) -> None:
             """
@@ -279,10 +279,10 @@ else:
             try:
                 response: RestResponse = self.client.patch(manager_ethernet_uri, payload)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error setting manager Ethernet IPv4 DNS servers', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message='Error occurred when configuring IPv4 DNS servers', exception=to_native(e)))
 
             if response.status not in [200, 204]:
-                self.handle_error(iLOModuleError(message='Failed to set manager Ethernet IPv4 DNS servers'))
+                self.handle_error(iLOModuleError(message='Failed to configure IPv4 DNS servers'))
 
 
 from ansible.module_utils.basic import missing_required_lib
@@ -305,7 +305,7 @@ def run_module() -> None:
         use_dhcp = dns_servers is None
 
     if use_dhcp and dns_servers is not None:
-        module.fail_json(msg='Cannot specify dns_servers when use_dhcp is true.')
+        module.fail_json(msg='Cannot specify dns_servers when use_dhcp is true')
 
     if dns_servers is not None:
 
@@ -314,7 +314,7 @@ def run_module() -> None:
                 module.fail_json(msg=f'Invalid IPv4 address: {dns_server}')
 
         if (len(dns_servers) > 3):
-            module.fail_json(msg='The list of DNS servers must contain no more than three servers.')
+            module.fail_json(msg='The list of DNS servers must contain no more than three servers')
 
         if (len(dns_servers) == 0):
             dns_servers.append('0.0.0.0')

@@ -182,38 +182,38 @@ else:
             try:
                 response: RestResponse = self.client.get(manager_ethernet_uri)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error retrieving manager Ethernet NTP servers', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message=f'Error retrieving {manager_ethernet_uri}', exception=to_native(e)))
 
             if response.status != 200:
-                self.handle_error(iLOModuleError(message='Failed to retrieve manager Ethernet NTP servers'))
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {manager_ethernet_uri}'))
 
             if 'Oem' not in response.dict:
-                self.handle_error(iLOModuleError(message='No Oem found in manager Ethernet'))
+                self.handle_error(iLOModuleError(message=f'\'Oem\' is not found in {manager_ethernet_uri}'))
 
             oem: dict = response.dict['Oem']
 
             if 'Hpe' not in oem:
-                self.handle_error(iLOModuleError(message='No Hpe found in manager Ethernet Oem'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe\' is not found in {manager_ethernet_uri}'))
 
             hpe: dict = oem['Hpe']
 
             if 'DHCPv4' not in hpe:
-                self.handle_error(iLOModuleError(message='No DHCPv4 found in manager Ethernet Oem Hpe'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv4\' is not found in {manager_ethernet_uri}'))
 
             dhcpv4: dict = hpe['DHCPv4']
 
             if 'UseNTPServers' not in dhcpv4:
-                self.handle_error(iLOModuleError(message='No UseNTPServers found in manager Ethernet Oem Hpe DHCPv4'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv4.UseNTPServers\' is not found in {manager_ethernet_uri}'))
 
             use_dhcpv4: bool = dhcpv4['UseNTPServers']
 
             if 'DHCPv6' not in hpe:
-                self.handle_error(iLOModuleError(message='No DHCPv6 found in manager Ethernet Oem Hpe'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv6\' is not found in {manager_ethernet_uri}'))
 
             dhcpv6: dict = hpe['DHCPv6']
 
             if 'UseNTPServers' not in dhcpv6:
-                self.handle_error(iLOModuleError(message='No UseNTPServers found in manager Ethernet Oem Hpe DHCPv6'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.DHCPv6.UseNTPServers\' is not found in {manager_ethernet_uri}'))
 
             use_dhcpv6: bool = dhcpv6['UseNTPServers']
 
@@ -222,13 +222,13 @@ else:
             try:
                 response: RestResponse = self.client.get(date_time_uri)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error retrieving manager DateTime', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message=f'Error retrieving {date_time_uri}', exception=to_native(e)))
 
             if response.status != 200:
-                self.handle_error(iLOModuleError(message='Failed to retrieve manager DateTime'))
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {date_time_uri}'))
 
             if 'StaticNTPServers' not in response.dict:
-                self.handle_error(iLOModuleError(message='No StaticNTPServers found in manager DateTime'))
+                self.handle_error(iLOModuleError(message=f'\'StaticNTPServers\' is not found in {date_time_uri}'))
 
             ntp_servers: List[str] = response.dict['StaticNTPServers']
 
@@ -267,10 +267,10 @@ else:
             try:
                 response: RestResponse = self.client.patch(manager_ethernet_uri, payload)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error setting manager Ethernet IPv4 UseNTPServers', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message='Error occurred while configuring the DHCP NTP server behavior', exception=to_native(e)))
 
             if response.status not in [200, 204]:
-                self.handle_error(iLOModuleError(message='Failed to set manager Ethernet IPv4 UseNTPServers'))
+                self.handle_error(iLOModuleError(message='Failed to configure the DHCP NTP server behavior'))
 
         def set_ntp_servers(self, ntp_servers: List[str]) -> None:
             """
@@ -290,10 +290,10 @@ else:
             try:
                 response: RestResponse = self.client.patch(date_time_uri, payload)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error setting manager Ethernet IPv4 NTP servers', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message='Error occurred while configuring NTP servers', exception=to_native(e)))
 
             if response.status not in [200, 204]:
-                self.handle_error(iLOModuleError(message='Failed to set manager Ethernet IPv4 NTP servers'))
+                self.handle_error(iLOModuleError(message='Failed to configure NTP servers'))
 
 
 from ansible.module_utils.basic import missing_required_lib
@@ -316,7 +316,7 @@ def run_module() -> None:
         use_dhcp = ntp_servers is None
 
     if use_dhcp and ntp_servers is not None:
-        module.fail_json(msg='Cannot specify ntp_servers when use_dhcp is true.')
+        module.fail_json(msg='Cannot specify ntp_servers when use_dhcp is true')
 
     if ntp_servers is not None:
 
@@ -325,7 +325,7 @@ def run_module() -> None:
                 module.fail_json(msg=f'Invalid IP address: {ntp_server}')
 
         if (len(ntp_servers) > 2):
-            module.fail_json(msg='The list of NTP servers must contain no more than two servers.')
+            module.fail_json(msg='The list of NTP servers must contain no more than two servers')
 
         if (len(ntp_servers) == 0):
             ntp_servers.append('')

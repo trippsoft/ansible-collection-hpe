@@ -117,13 +117,13 @@ else:
             try:
                 response: RestResponse = self.client.get(manager_ethernet_uri)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error retrieving manager Ethernet hostname', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message=f'Error retrieving {manager_ethernet_uri}', exception=to_native(e)))
 
             if response.status != 200:
-                self.handle_error(iLOModuleError(message='Failed to retrieve manager Ethernet hostname'))
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {manager_ethernet_uri}'))
 
             if 'HostName' not in response.dict:
-                self.handle_error(iLOModuleError(message='No HostName found in manager Ethernet'))
+                self.handle_error(iLOModuleError(message=f'\'HostName\' is not found in {manager_ethernet_uri}'))
 
             return response.dict['HostName']
 
@@ -145,10 +145,10 @@ else:
             try:
                 response: RestResponse = self.client.patch(manager_ethernet_uri, payload)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error setting manager Ethernet hostname', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message='Error occurred when configuring hostname', exception=to_native(e)))
 
             if response.status not in [200, 204]:
-                self.handle_error(iLOModuleError(message='Failed to set manager Ethernet hostname'))
+                self.handle_error(iLOModuleError(message='Failed to configure hostname'))
 
 
 from ansible.module_utils.basic import missing_required_lib
@@ -168,8 +168,7 @@ def run_module() -> None:
 
     if not validate_hostname(hostname):
         module.fail_json(
-            msg='Invalid hostname format.  ' +
-                'The hostname must be a valid DNS name, which can only include letters, numbers, and hyphens, and must not exceed 63 characters in length.'
+            msg='The hostname must begin with a letter, contain only letters, numbers, and hyphens, and must not exceed 63 characters in length'
         )
 
     module.initialize_client()
