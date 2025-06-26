@@ -297,20 +297,20 @@ else:
 
             desired_config: dict = self.params.copy()
 
+            for key in MODULE_INIT_ARGS['argument_spec'].keys():
+                if desired_config.get(key, None) is None:
+                    del desired_config[key]
+
+            for key in COMMON_ARGSPEC.keys():
+                if key in desired_config:
+                    del desired_config[key]
+
             if 'state' in desired_config:
                 del desired_config['state']
 
             if 'update_passphrase' in desired_config:
                 if desired_config['update_passphrase'] == 'on_create':
                     del desired_config['update_passphrase']
-
-            for key in MODULE_INIT_ARGS['argument_spec'].keys():
-                if desired_config[key] is None:
-                    del desired_config[key]
-
-            for key in COMMON_ARGSPEC.keys():
-                if key in desired_config:
-                    del desired_config[key]
 
             return desired_config
 
