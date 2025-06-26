@@ -434,6 +434,13 @@ else:
                 if key in ['auth_passphrase', 'priv_passphrase'] and update_passphrase == 'on_create':
                     continue
 
+                if key in ['auth_protocol', 'priv_protocol']:
+
+                    if key not in current or current[key].lower() != desired[key].lower():
+                        changes_needed[key] = desired[key]
+
+                    continue
+
                 if key not in current or current[key] != desired[key]:
                     changes_needed[key] = desired[key]
 
@@ -592,10 +599,16 @@ def run_module() -> None:
                 returned_user: dict = current_user.copy()
                 returned_user.update(changes_needed)
 
-                if 'auth_passphrase' in changes_needed:
+                if 'auth_protocol' in returned_user:
+                    returned_user['auth_protocol'] = returned_user['auth_protocol'].lower()
+
+                if 'auth_passphrase' in returned_user:
                     returned_user['auth_passphrase'] = '*'
 
-                if 'priv_passphrase' in changes_needed:
+                if 'priv_protocol' in returned_user:
+                    returned_user['priv_protocol'] = returned_user['priv_protocol'].lower()
+
+                if 'priv_passphrase' in returned_user:
                     returned_user['priv_passphrase'] = '*'
 
                 result['changed'] = True
