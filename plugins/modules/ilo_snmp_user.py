@@ -361,8 +361,8 @@ else:
 
             return dict(
                 security_name=user['SecurityName'],
-                auth_protocol=user['AuthProtocol'],
-                priv_protocol=user['PrivacyProtocol'],
+                auth_protocol=user['AuthProtocol'].lower(),
+                priv_protocol=user['PrivacyProtocol'].lower(),
                 user_engine_id=user['UserEngineID']
             )
 
@@ -432,13 +432,6 @@ else:
             for key in desired.keys():
 
                 if key in ['auth_passphrase', 'priv_passphrase'] and update_passphrase == 'on_create':
-                    continue
-
-                if key in ['auth_protocol', 'priv_protocol']:
-
-                    if key not in current or current[key].lower() != desired[key].lower():
-                        changes_needed[key] = desired[key]
-
                     continue
 
                 if key not in current or current[key] != desired[key]:
@@ -594,19 +587,19 @@ def run_module() -> None:
         else:
             changes_needed: dict = module.get_changes_needed(current_user, desired_config)
 
-            if len(changes_needed) > 0:
+            if len(changes_needed) > 1:
 
                 returned_user: dict = current_user.copy()
                 returned_user.update(changes_needed)
 
                 if 'auth_protocol' in returned_user:
-                    returned_user['auth_protocol'] = returned_user['auth_protocol'].lower()
+                    returned_user['auth_protocol'] = returned_user['auth_protocol']
 
                 if 'auth_passphrase' in returned_user:
                     returned_user['auth_passphrase'] = '*'
 
                 if 'priv_protocol' in returned_user:
-                    returned_user['priv_protocol'] = returned_user['priv_protocol'].lower()
+                    returned_user['priv_protocol'] = returned_user['priv_protocol']
 
                 if 'priv_passphrase' in returned_user:
                     returned_user['priv_passphrase'] = '*'
