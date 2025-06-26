@@ -556,6 +556,7 @@ else:
             if response.status not in [200, 204]:
                 self.handle_error(iLOModuleError(message='Failed to configure SNMP'))
 
+
 from ansible.module_utils.basic import missing_required_lib
 
 
