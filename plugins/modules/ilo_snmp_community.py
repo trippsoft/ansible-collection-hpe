@@ -90,6 +90,16 @@ except ImportError:
         def __init__(self, *args, **kwargs) -> None:
             super().__init__(*args, argument_spec=ARGSPEC.copy(), supports_check_mode=True, **kwargs)
 
+        def get_snmpv1_config(self) -> dict:
+            """
+            Get the SNMPv1 configuration from the Redfish client.
+
+            Returns:
+                dict: The SNMPv1 configuration.
+            """
+
+            pass
+
         def get_snmp_communities(self) -> List[str]:
             """
             Get the SNMP community configuration from the Redfish client.
@@ -122,6 +132,50 @@ else:
 
         def __init__(self, *args, **kwargs) -> None:
             super().__init__(*args, argument_spec=ARGSPEC.copy(), supports_check_mode=True, **kwargs)
+
+        def get_snmpv1_config(self) -> dict:
+            """
+            Get the SNMPv1 configuration from the Redfish client.
+
+            Returns:
+                dict: The SNMPv1 configuration.
+            """
+
+            snmp_service_uri: str = self.get_manager_snmp_service_uri()
+
+            try:
+                response: RestResponse = self.client.get(snmp_service_uri)
+            except Exception as e:
+                self.handle_error(iLOModuleError(message=f'Error retrieving {snmp_service_uri}', exception=to_native(e)))
+
+            if response.status != 200:
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {snmp_service_uri}'))
+
+            if 'Status' not in response.dict:
+                self.handle_error(iLOModuleError(message=f'\'Status\' not found in {snmp_service_uri}'))
+
+            status: dict = response.dict['Status']
+
+            if 'State' not in status:
+                self.handle_error(iLOModuleError(message=f'\'Status.State\' not found in {snmp_service_uri}'))
+
+            enabled: bool = status['State'].lower() == 'enabled'
+
+            if 'SNMPv1Enabled' not in response.dict:
+                self.handle_error(iLOModuleError(message=f'\'SNMPv1Enabled\' not found in {snmp_service_uri}'))
+
+            snmpv1_enabled: bool = response.dict['SNMPv1Enabled']
+
+            if 'SNMPv1RequestsEnabled' not in response.dict:
+                self.handle_error(iLOModuleError(message=f'\'SNMPv1RequestsEnabled\' not found in {snmp_service_uri}'))
+
+            snmpv1_requests_enabled: bool = response.dict['SNMPv1RequestsEnabled']
+
+            return dict(
+                enabled=enabled,
+                snmpv1_enabled=snmpv1_enabled,
+                snmpv1_requests_enabled=snmpv1_requests_enabled
+            )
 
         def get_snmp_communities(self) -> List[str]:
             """
@@ -208,6 +262,7 @@ def run_module() -> None:
     )
 
     current_communities: List[str] = module.get_snmp_communities()
+    snmpv1_config: dict = module.get_snmpv1_config()
 
     result['diff']['before']['communities'] = current_communities
 
@@ -221,6 +276,10 @@ def run_module() -> None:
             result['diff']['after']['communities'] = desired_communities
 
             if not module.check_mode:
+
+                if not snmpv1_config['enabled'] or not snmpv1_config['snmpv1_enabled'] or not snmpv1_config['snmpv1_requests_enabled']:
+                    module.handle_error(iLOModuleError(message='SNMPv1 must be enabled to configure SNMP communities'))
+
                 module.set_snmp_communities(desired_communities)
 
         else:
@@ -235,6 +294,10 @@ def run_module() -> None:
             result['diff']['after']['communities'] = desired_communities
 
             if not module.check_mode:
+
+                if not snmpv1_config['enabled'] or not snmpv1_config['snmpv1_enabled'] or not snmpv1_config['snmpv1_requests_enabled']:
+                    module.handle_error(iLOModuleError(message='SNMPv1 must be enabled to configure SNMP communities'))
+
                 module.set_snmp_communities(desired_communities)
 
         else:
