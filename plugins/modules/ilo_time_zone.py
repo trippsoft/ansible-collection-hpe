@@ -191,7 +191,17 @@ else:
 
         def __init__(self, *args, **kwargs) -> None:
 
-            super().__init__(*args, argument_spec=ARGSPEC.copy(), **kwargs)
+            super().__init__(
+                *args,
+                argument_spec=ARGSPEC.copy(),
+                mutually_exclusive=[
+                    ('name', 'index')
+                ],
+                required_one_of=[
+                    ('name', 'index')
+                ],
+                supports_check_mode=True,
+                **kwargs)
 
         def get_time_zone(self) -> dict:
             """
