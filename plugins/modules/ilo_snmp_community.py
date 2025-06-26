@@ -159,6 +159,18 @@ else:
                 communities (List[str]): A list of SNMP community strings to configure.
             """
 
+            if len(communities) > 3:
+                self.handle_error(iLOModuleError(message='A maximum of 3 SNMP communities can be configured'))
+
+            if len(communities) == 0:
+                communities.append('')
+
+            if len(communities) == 1:
+                communities.append('')
+
+            if len(communities) == 2:
+                communities.append('')
+
             snmp_service_uri: str = self.get_manager_snmp_service_uri()
 
             payload: dict = dict(ReadCommunities=communities)
