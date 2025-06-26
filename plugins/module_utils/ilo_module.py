@@ -111,26 +111,28 @@ else:
             if not self.client:
                 self.fail_json(msg='Redfish client is not initialized')
 
+            managers_uri: str = '/redfish/v1/Managers'
+
             try:
-                response: RestResponse = self.client.get('/redfish/v1/Managers')
+                response: RestResponse = self.client.get(managers_uri)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error retrieving manager URI', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message=f'Error retrieving {managers_uri}', exception=to_native(e)))
 
             if response.status != 200:
-                self.handle_error(iLOModuleError(message='Failed to retrieve manager collection'))
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {managers_uri}'))
 
             if 'Members' not in response.dict:
-                self.handle_error(iLOModuleError(message='No members found in manager collection'))
+                self.handle_error(iLOModuleError(message=f'\'Members\' not found in {managers_uri}'))
 
             members: List[dict] = response.dict['Members']
 
             if len(members) == 0:
-                self.handle_error(iLOModuleError(message='Empty members found in manager collection'))
+                self.handle_error(iLOModuleError(message=f'Empty \'Members\' found in {managers_uri}'))
 
             member: dict = members[0]
 
             if '@odata.id' not in member:
-                self.handle_error(iLOModuleError(message='No @odata.id found in manager member'))
+                self.handle_error(iLOModuleError(message=f'No \'@odata.id\' found in manager member'))
 
             return member['@odata.id']
 
@@ -150,33 +152,33 @@ else:
             try:
                 response: RestResponse = self.client.get(manager_uri)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error retrieving manager date time URI', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message=f'Error retrieving {manager_uri}', exception=to_native(e)))
 
             if response.status != 200:
-                self.handle_error(iLOModuleError(message='Failed to retrieve manager date time URI'))
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {manager_uri}'))
 
             if 'Oem' not in response.dict:
-                self.handle_error(iLOModuleError(message='No Oem found in manager'))
+                self.handle_error(iLOModuleError(message=f'\'Oem\' not found in {manager_uri}'))
 
             oem: dict = response.dict['Oem']
 
             if 'Hpe' not in oem:
-                self.handle_error(iLOModuleError(message='No Hpe found in manager Oem'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe\' not found in {manager_uri}'))
 
             hpe: dict = oem['Hpe']
 
             if 'Links' not in hpe:
-                self.handle_error(iLOModuleError(message='No Links found in manager Hpe'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.Links\' not found in {manager_uri}'))
 
             links: dict = hpe['Links']
 
             if 'DateTimeService' not in links:
-                self.handle_error(iLOModuleError(message='No DateTimeService found in manager Hpe Links'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.Links.DateTimeService\' not found in {manager_uri}'))
 
             date_time: dict = links['DateTimeService']
 
             if '@odata.id' not in date_time:
-                self.handle_error(iLOModuleError(message='No @odata.id found in manager Hpe Links DateTimeService'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.Links.DateTimeService.@odata.id\' not found in {manager_uri}'))
 
             return date_time['@odata.id']
 
@@ -196,35 +198,84 @@ else:
             try:
                 response: RestResponse = self.client.get(manager_uri)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error retrieving manager Ethernet URI', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message=f'Error retrieving {manager_uri}', exception=to_native(e)))
 
             if response.status != 200:
-                self.handle_error(iLOModuleError(message='Failed to retrieve manager Ethernet URI'))
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {manager_uri}'))
 
             if 'EthernetInterfaces' not in response.dict:
-                self.handle_error(iLOModuleError(message='No EthernetInterfaces found in manager'))
+                self.handle_error(iLOModuleError(message=f'\'EthernetInterfaces\' not found in {manager_uri}'))
 
             ethernet_interfaces: dict = response.dict['EthernetInterfaces']
 
             if '@odata.id' not in ethernet_interfaces:
-                self.handle_error(iLOModuleError(message='No @odata.id found in manager EthernetInterfaces'))
+                self.handle_error(iLOModuleError(message=f'\'EthernetInterfaces.@odata.id\' not found in {manager_uri}'))
 
             manager_ethernet_collection_uri: str = ethernet_interfaces['@odata.id']
 
             try:
                 response = self.client.get(manager_ethernet_collection_uri)
             except Exception as e:
-                self.handle_error(iLOModuleError(message='Error retrieving manager Ethernet URI', exception=to_native(e)))
+                self.handle_error(iLOModuleError(message=f'Error retrieving {manager_ethernet_collection_uri}', exception=to_native(e)))
 
             if response.status != 200:
-                self.handle_error(iLOModuleError(message='Failed to retrieve manager Ethernet URI'))
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {manager_ethernet_collection_uri}'))
 
             if 'Members' not in response.dict:
-                self.handle_error(iLOModuleError(message='No members found in manager Ethernet collection'))
+                self.handle_error(iLOModuleError(message=f'\'Members\' not found in {manager_ethernet_collection_uri}'))
 
             members: List[dict] = response.dict['Members']
 
             if len(members) == 0:
-                self.handle_error(iLOModuleError(message='Empty members found in manager Ethernet collection'))
+                self.handle_error(iLOModuleError(message=f'Empty \'Members\' found in {manager_ethernet_collection_uri}'))
+
+            if '@odata.id' not in members[0]:
+                self.handle_error(iLOModuleError(message=f'No \'@odata.id\' found in manager Ethernet member'))
 
             return members[0]['@odata.id']
+
+        def get_manager_snmp_service_uri(self) -> str:
+            """
+            Get the manager SNMP service URI from the Redfish client.
+
+            Returns:
+                str: The manager SNMP service URI.
+            """
+
+            if not self.client:
+                self.fail_json(msg='Redfish client is not initialized')
+
+            manager_uri: str = self.get_manager_uri()
+
+            try:
+                response: RestResponse = self.client.get(manager_uri)
+            except Exception as e:
+                self.handle_error(iLOModuleError(message=f'Error retrieving {manager_uri}', exception=to_native(e)))
+
+            if response.status != 200:
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {manager_uri}'))
+
+            if 'Oem' not in response.dict:
+                self.handle_error(iLOModuleError(message=f'\'Oem\' not found in {manager_uri}'))
+
+            oem: dict = response.dict['Oem']
+
+            if 'Hpe' not in oem:
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe\' not found in {manager_uri}'))
+
+            hpe: dict = oem['Hpe']
+
+            if 'Links' not in hpe:
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.Links\' not found in {manager_uri}'))
+
+            links: dict = hpe['Links']
+
+            if 'SnmpService' not in links:
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.Links.SnmpService\' not found in {manager_uri}'))
+
+            snmp_service: dict = links['SnmpService']
+
+            if '@odata.id' not in snmp_service:
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.Links.SnmpService.@odata.id\' not found in {manager_uri}'))
+
+            return snmp_service['@odata.id']
