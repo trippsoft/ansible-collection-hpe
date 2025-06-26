@@ -301,12 +301,12 @@ else:
             if response.status != 200:
                 self.handle_error(iLOModuleError(message=f'Failed to retrieve {snmp_service_uri}'))
 
-            if 'Users' not in response.dict:
+            if 'SNMPUsers' not in response.dict:
                 self.handle_error(iLOModuleError(message=f'\'SNMPUsers\' not found in {snmp_service_uri}'))
 
-            users: dict = response.dict['Users']
+            snmp_users: dict = response.dict['SNMPUsers']
 
-            if '@odata.id' not in users:
+            if '@odata.id' not in snmp_users:
                 self.handle_error(iLOModuleError(message=f'\'SNMPUsers.@odata.id\' not found in {snmp_service_uri}'))
 
-            return users['@odata.id']
+            return snmp_users['@odata.id']
