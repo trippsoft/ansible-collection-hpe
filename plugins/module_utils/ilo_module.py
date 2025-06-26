@@ -132,7 +132,7 @@ else:
             member: dict = members[0]
 
             if '@odata.id' not in member:
-                self.handle_error(iLOModuleError(message=f'No \'@odata.id\' found in manager member'))
+                self.handle_error(iLOModuleError(message='No \'@odata.id\' found in manager member'))
 
             return member['@odata.id']
 
@@ -230,7 +230,7 @@ else:
                 self.handle_error(iLOModuleError(message=f'Empty \'Members\' found in {manager_ethernet_collection_uri}'))
 
             if '@odata.id' not in members[0]:
-                self.handle_error(iLOModuleError(message=f'No \'@odata.id\' found in manager Ethernet member'))
+                self.handle_error(iLOModuleError(message='No \'@odata.id\' found in manager Ethernet member'))
 
             return members[0]['@odata.id']
 

@@ -21,7 +21,6 @@ options:
   enabled:
     type: bool
     required: false
-    default: true
     description:
       - Whether SNMP is enabled on the iLO device.
       - This supersedes all other SNMP settings on the iLO device.
@@ -94,8 +93,8 @@ options:
       - 'host'
     description:
         - The source hostname for SNMP traps.
-        - If set to O(ilo), the iLO hostname will be used.
-        - If set to O(host), the host's hostname will be used.
+        - If set to V(ilo), the iLO hostname will be used.
+        - If set to V(host), the host's hostname will be used.
 """
 
 EXAMPLES = r"""
@@ -214,7 +213,7 @@ from ansible.module_utils.common.text.converters import to_native
 from ..module_utils.ilo_module import COMMON_ARGSPEC, iLOModule
 from ..module_utils.ilo_module_error import iLOModuleError
 
-from typing import List, Optional
+from typing import Optional
 
 ARGSPEC: dict = dict(
     enabled=dict(type='bool', required=False),

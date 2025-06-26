@@ -5,14 +5,14 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 DOCUMENTATION = r"""
-module: ilo_ntp_servers
+module: ilo_time_zone
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Configures iLO IPv4 NTP servers.
+short_description: Configures iLO time zone settings.
 description:
   - >-
-    This module configures the IPv4 NTP servers for an HPE iLO device.
+    This module configures the time zone settings for an HPE iLO device.
 extends_documentation_fragment:
   - trippsc2.hpe.action_group
   - trippsc2.hpe.check_mode
@@ -21,6 +21,8 @@ options:
   name:
     type: str
     required: false
+    aliases:
+      - time_zone
     description:
       - The name of the time zone to configure.
       - This should be a valid time zone name in HPE iLO style (e.g., "Bogota, Lima, Quito, Eastern Time(US & Canada)").
@@ -29,6 +31,8 @@ options:
   index:
     type: int
     required: false
+    aliases:
+      - time_zone_index
     description:
       - The index of the time zone to configure.
       - This is mutually exclusive with O(name).
@@ -315,8 +319,7 @@ def run_module() -> None:
 
     result["diff"]["before"]["time_zone"] = current_time_zone
 
-    if ((name is not None and current_time_zone['name'] == name) or
-        (index is not None and current_time_zone['index'] == index)):
+    if ((name is not None and current_time_zone['name'] == name) or (index is not None and current_time_zone['index'] == index)):
 
         result["diff"]["after"]["time_zone"] = current_time_zone
         result["time_zone"] = current_time_zone
