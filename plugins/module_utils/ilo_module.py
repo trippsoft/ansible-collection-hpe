@@ -270,12 +270,12 @@ else:
 
             links: dict = hpe['Links']
 
-            if 'SnmpService' not in links:
-                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.Links.SnmpService\' not found in {manager_uri}'))
+            if 'SNMPService' not in links:
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.Links.SNMPService\' not found in {manager_uri}'))
 
-            snmp_service: dict = links['SnmpService']
+            snmp_service: dict = links['SNMPService']
 
             if '@odata.id' not in snmp_service:
-                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.Links.SnmpService.@odata.id\' not found in {manager_uri}'))
+                self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.Links.SNMPService.@odata.id\' not found in {manager_uri}'))
 
             return snmp_service['@odata.id']
