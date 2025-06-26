@@ -522,15 +522,19 @@ def run_module() -> None:
     if state == 'absent':
         unsupported_params: List[str] = []
 
-        if 'auth_protocol' in module.params:
+        if module.params.get('auth_protocol', None) is not None:
             unsupported_params.append('auth_protocol')
-        if 'auth_passphrase' in module.params:
+
+        if module.params.get('auth_passphrase', None) is not None:
             unsupported_params.append('auth_passphrase')
-        if 'priv_protocol' in module.params:
+
+        if module.params.get('priv_protocol', None) is not None:
             unsupported_params.append('priv_protocol')
-        if 'priv_passphrase' in module.params:
+
+        if module.params.get('priv_passphrase', None) is not None:
             unsupported_params.append('priv_passphrase')
-        if 'user_engine_id' in module.params:
+
+        if module.params.get('user_engine_id', None) is not None:
             unsupported_params.append('user_engine_id')
 
         if len(unsupported_params) > 0:
