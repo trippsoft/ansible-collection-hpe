@@ -215,7 +215,7 @@ else:
                 payload['OrgUnit'] = self.params['organizational_unit']
 
             try:
-                response: RestResponse = self.client.post(generate_csr_uri, data=payload)
+                response: RestResponse = self.client.post(generate_csr_uri, payload)
             except Exception as e:
                 self.handle_error(iLOModuleError('Error generating CSR', exception=to_native(e)))
 
