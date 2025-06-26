@@ -347,10 +347,10 @@ else:
 
             generate_csr: dict = actions['#HpeHttpsCert.GenerateCSR']
 
-            if '@odata.id' not in generate_csr:
-                self.handle_error(iLOModuleError(message=f'\'Actions.#HpeHttpsCert.GenerateCSR.@odata.id\' not found in {https_certificate_uri}'))
+            if 'target' not in generate_csr:
+                self.handle_error(iLOModuleError(message=f'\'Actions.#HpeHttpsCert.GenerateCSR.target\' not found in {https_certificate_uri}'))
 
-            return generate_csr['@odata.id']
+            return generate_csr['target']
 
         def get_https_cert_import_certificate_uri(self) -> str:
             """
@@ -383,10 +383,10 @@ else:
 
             import_certificate: dict = actions['#HpeHttpsCert.ImportCertificate']
 
-            if '@odata.id' not in import_certificate:
-                self.handle_error(iLOModuleError(message=f'\'Actions.#HpeHttpsCert.ImportCertificate.@odata.id\' not found in {https_certificate_uri}'))
+            if 'target' not in import_certificate:
+                self.handle_error(iLOModuleError(message=f'\'Actions.#HpeHttpsCert.ImportCertificate.target\' not found in {https_certificate_uri}'))
 
-            return import_certificate['@odata.id']
+            return import_certificate['target']
 
         def get_manager_snmp_service_uri(self) -> str:
             """
