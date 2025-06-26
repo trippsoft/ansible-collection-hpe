@@ -94,9 +94,18 @@ from ..module_utils.ilo_module_error import iLOModuleError
 
 from typing import List, Optional
 
-ARGSPEC: dict = dict(
-    name=dict(type='str', required=False, aliases=['time_zone']),
-    index=dict(type='int', required=False, aliases=['time_zone_index'])
+MODULE_INIT_ARGS: dict = dict(
+    argument_spec=dict(
+        name=dict(type='str', required=False, aliases=['time_zone']),
+        index=dict(type='int', required=False, aliases=['time_zone_index'])
+    ),
+    mutually_exclusive=[
+        ('name', 'index')
+    ],
+    required_one_of=[
+        ('name', 'index')
+    ],
+    supports_check_mode=True
 )
 
 try:
@@ -111,19 +120,7 @@ except ImportError:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-
-            super().__init__(
-                *args,
-                argument_spec=ARGSPEC.copy(),
-                mutually_exclusive=[
-                    ('name', 'index')
-                ],
-                required_one_of=[
-                    ('name', 'index')
-                ],
-                supports_check_mode=True,
-                **kwargs
-            )
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_time_zone(self) -> dict:
             """
@@ -190,18 +187,7 @@ else:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-
-            super().__init__(
-                *args,
-                argument_spec=ARGSPEC.copy(),
-                mutually_exclusive=[
-                    ('name', 'index')
-                ],
-                required_one_of=[
-                    ('name', 'index')
-                ],
-                supports_check_mode=True,
-                **kwargs)
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_time_zone(self) -> dict:
             """

@@ -49,8 +49,11 @@ from ..module_utils.ilo_utils import validate_hostname
 
 from typing import Optional
 
-ARGSPEC: dict = dict(
-    hostname=dict(type='str', required=True)
+MODULE_INIT_ARGS: dict = dict(
+    argument_spec=dict(
+        hostname=dict(type='str', required=True)
+    ),
+    supports_check_mode=True
 )
 
 try:
@@ -66,7 +69,7 @@ except ImportError:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-            super().__init__(*args, argument_spec=ARGSPEC.copy(), supports_check_mode=True, **kwargs)
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_hostname(self) -> str:
             """
@@ -99,7 +102,7 @@ else:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-            super().__init__(*args, argument_spec=ARGSPEC.copy(), supports_check_mode=True, **kwargs)
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_hostname(self) -> str:
             """

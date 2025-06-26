@@ -76,9 +76,15 @@ from ..module_utils.ilo_utils import validate_hostname
 
 from typing import Optional
 
-ARGSPEC: dict = dict(
-    domain_name=dict(type='str', required=False),
-    use_dhcp=dict(type='bool', required=False)
+MODULE_INIT_ARGS: dict = dict(
+    argument_spec=dict(
+        domain_name=dict(type='str', required=False),
+        use_dhcp=dict(type='bool', required=False)
+    ),
+    required_if=[
+        ('use_dhcp', False, ['domain_name'])
+    ],
+    supports_check_mode=True
 )
 
 try:
@@ -94,16 +100,7 @@ except ImportError:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-
-            super().__init__(
-                *args,
-                argument_spec=ARGSPEC.copy(),
-                required_if=[
-                    ('use_dhcp', False, ['domain_name'])
-                ],
-                supports_check_mode=True,
-                **kwargs
-            )
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_domain_name_config(self) -> dict:
             """
@@ -124,7 +121,6 @@ except ImportError:
             """
 
             discard = use_dhcp
-            pass
 
         def set_domain_name(self, domain_name: str) -> None:
             """
@@ -135,7 +131,6 @@ except ImportError:
             """
 
             discard = domain_name
-            pass
 
 else:
     HAS_REDFISH: bool = True
@@ -147,7 +142,7 @@ else:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-            super().__init__(*args, argument_spec=ARGSPEC.copy(), supports_check_mode=True, **kwargs)
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_domain_name_config(self) -> dict:
             """

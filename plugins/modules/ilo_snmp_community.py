@@ -66,14 +66,12 @@ from ..module_utils.ilo_module_error import iLOModuleError
 
 from typing import List, Optional
 
-ARGSPEC: dict = dict(
-    name=dict(type='str', required=True),
-    state=dict(
-        type='str',
-        required=False,
-        default='present',
-        choices=['present', 'absent']
-    )
+MODULE_INIT_ARGS: dict = dict(
+    argument_spec=dict(
+        name=dict(type='str', required=True),
+        state=dict(type='str', required=False, default='present', choices=['present', 'absent'])
+    ),
+    supports_check_mode=True
 )
 
 try:
@@ -88,7 +86,7 @@ except ImportError:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-            super().__init__(*args, argument_spec=ARGSPEC.copy(), supports_check_mode=True, **kwargs)
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_snmpv1_config(self) -> dict:
             """
@@ -131,7 +129,7 @@ else:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-            super().__init__(*args, argument_spec=ARGSPEC.copy(), supports_check_mode=True, **kwargs)
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_snmpv1_config(self) -> dict:
             """

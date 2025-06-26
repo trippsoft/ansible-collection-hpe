@@ -5,4 +5,5 @@ plugins/modules/ilo_ipv6_dns_servers.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_ntp_servers.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_snmp_community.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_snmp_config.py validate-modules:missing-gplv3-license
+plugins/modules/ilo_snmp_user.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_time_zone.py validate-modules:missing-gplv3-license

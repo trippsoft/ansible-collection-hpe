@@ -215,21 +215,42 @@ from ..module_utils.ilo_module_error import iLOModuleError
 
 from typing import Optional
 
-ARGSPEC: dict = dict(
-    enabled=dict(type='bool', required=False),
-    alerts_enabled=dict(type='bool', required=False),
-    contact=dict(type='str', required=False),
-    location=dict(type='str', required=False),
-    role=dict(type='str', required=False),
-    role_detail=dict(type='str', required=False),
-    snmpv1_enabled=dict(type='bool', required=False),
-    snmpv1_requests_enabled=dict(type='bool', required=False),
-    snmpv1_trap_enabled=dict(type='bool', required=False),
-    snmpv3_inform_retry_attempts=dict(type='int', required=False),
-    snmpv3_inform_retry_interval=dict(type='int', required=False),
-    snmpv3_requests_enabled=dict(type='bool', required=False),
-    snmpv3_trap_enabled=dict(type='bool', required=False),
-    trap_source_hostname=dict(type='str', required=False, choices=['ilo', 'host'])
+MODULE_INIT_ARGS: dict = dict(
+    argument_spec=dict(
+        enabled=dict(type='bool', required=False),
+        alerts_enabled=dict(type='bool', required=False),
+        contact=dict(type='str', required=False),
+        location=dict(type='str', required=False),
+        role=dict(type='str', required=False),
+        role_detail=dict(type='str', required=False),
+        snmpv1_enabled=dict(type='bool', required=False),
+        snmpv1_requests_enabled=dict(type='bool', required=False),
+        snmpv1_trap_enabled=dict(type='bool', required=False),
+        snmpv3_inform_retry_attempts=dict(type='int', required=False),
+        snmpv3_inform_retry_interval=dict(type='int', required=False),
+        snmpv3_requests_enabled=dict(type='bool', required=False),
+        snmpv3_trap_enabled=dict(type='bool', required=False),
+        trap_source_hostname=dict(type='str', required=False, choices=['ilo', 'host'])
+    ),
+    required_one_of=[
+        (
+            'enabled',
+            'alerts_enabled',
+            'contact',
+            'location',
+            'role',
+            'role_detail',
+            'snmpv1_enabled',
+            'snmpv1_requests_enabled',
+            'snmpv1_trap_enabled',
+            'snmpv3_inform_retry_attempts',
+            'snmpv3_inform_retry_interval',
+            'snmpv3_requests_enabled',
+            'snmpv3_trap_enabled',
+            'trap_source_hostname'
+        )
+    ],
+    supports_check_mode=True
 )
 
 try:
@@ -244,29 +265,7 @@ except ImportError:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-            super().__init__(
-                *args,
-                argument_spec=ARGSPEC.copy(),
-                required_one_of=[
-                    (
-                        'enabled',
-                        'alerts_enabled',
-                        'contact',
-                        'location',
-                        'role',
-                        'role_detail',
-                        'snmpv1_enabled',
-                        'snmpv1_requests_enabled',
-                        'snmpv1_trap_enabled',
-                        'snmpv3_inform_retry_attempts',
-                        'snmpv3_inform_retry_interval',
-                        'snmpv3_requests_enabled',
-                        'snmpv3_trap_enabled',
-                        'trap_source_hostname'
-                    )
-                ],
-                supports_check_mode=True,
-                **kwargs)
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_desired_config(self) -> dict:
             """
@@ -325,29 +324,7 @@ else:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-            super().__init__(
-                *args,
-                argument_spec=ARGSPEC.copy(),
-                required_one_of=[
-                    (
-                        'enabled',
-                        'alerts_enabled',
-                        'contact',
-                        'location',
-                        'role',
-                        'role_detail',
-                        'snmpv1_enabled',
-                        'snmpv1_requests_enabled',
-                        'snmpv1_trap_enabled',
-                        'snmpv3_inform_retry_attempts',
-                        'snmpv3_inform_retry_interval',
-                        'snmpv3_requests_enabled',
-                        'snmpv3_trap_enabled',
-                        'trap_source_hostname'
-                    )
-                ],
-                supports_check_mode=True,
-                **kwargs)
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_desired_config(self) -> dict:
             """
@@ -359,7 +336,10 @@ else:
 
             desired_config: dict = self.params.copy()
 
-            for key in ARGSPEC.keys():
+            if 'state' in desired_config:
+                del desired_config['state']
+
+            for key in MODULE_INIT_ARGS['argument_spec'].keys():
                 if desired_config[key] is None:
                     del desired_config[key]
 

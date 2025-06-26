@@ -84,9 +84,15 @@ from ..module_utils.ilo_utils import validate_ipv4
 
 from typing import List, Optional
 
-ARGSPEC: dict = dict(
-    dns_servers=dict(type='list', required=False, elements='str'),
-    use_dhcp=dict(type='bool', required=False)
+MODULE_INIT_ARGS: dict = dict(
+    argument_spec=dict(
+        dns_servers=dict(type='list', required=False, elements='str'),
+        use_dhcp=dict(type='bool', required=False)
+    ),
+    required_if=[
+        ('use_dhcp', False, ['dns_servers'])
+    ],
+    supports_check_mode=True
 )
 
 try:
@@ -102,16 +108,7 @@ except ImportError:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-
-            super().__init__(
-                *args,
-                argument_spec=ARGSPEC.copy(),
-                required_if=[
-                    ('use_dhcp', False, ['dns_servers'])
-                ],
-                supports_check_mode=True,
-                **kwargs
-            )
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_ipv4_dns_server_config(self) -> dict:
             """
@@ -155,16 +152,7 @@ else:
         """
 
         def __init__(self, *args, **kwargs) -> None:
-
-            super().__init__(
-                *args,
-                argument_spec=ARGSPEC.copy(),
-                required_if=[
-                    ('use_dhcp', False, ['dns_servers'])
-                ],
-                supports_check_mode=True,
-                **kwargs
-            )
+            super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
         def get_ipv4_dns_server_config(self) -> dict:
             """

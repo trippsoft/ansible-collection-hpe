@@ -279,3 +279,34 @@ else:
                 self.handle_error(iLOModuleError(message=f'\'Oem.Hpe.Links.SNMPService.@odata.id\' not found in {manager_uri}'))
 
             return snmp_service['@odata.id']
+
+        def get_manager_snmp_users_uri(self) -> str:
+            """
+            Get the manager SNMP users URI from the Redfish client.
+
+            Returns:
+                str: The manager SNMP users URI.
+            """
+
+            if not self.client:
+                self.fail_json(msg='Redfish client is not initialized')
+
+            snmp_service_uri: str = self.get_manager_snmp_service_uri()
+
+            try:
+                response: RestResponse = self.client.get(snmp_service_uri)
+            except Exception as e:
+                self.handle_error(iLOModuleError(message=f'Error retrieving {snmp_service_uri}', exception=to_native(e)))
+
+            if response.status != 200:
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {snmp_service_uri}'))
+
+            if 'Users' not in response.dict:
+                self.handle_error(iLOModuleError(message=f'\'SNMPUsers\' not found in {snmp_service_uri}'))
+
+            users: dict = response.dict['Users']
+
+            if '@odata.id' not in users:
+                self.handle_error(iLOModuleError(message=f'\'SNMPUsers.@odata.id\' not found in {snmp_service_uri}'))
+
+            return users['@odata.id']
