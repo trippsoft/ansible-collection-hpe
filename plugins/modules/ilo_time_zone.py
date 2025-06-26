@@ -273,9 +273,9 @@ else:
 
             for time_zone in time_zones:
                 if index is not None and time_zone['Index'] == index:
-                    return [self.format_time_zone(time_zone)]
+                    return self.format_time_zone(time_zone)
                 elif name is not None and time_zone['Name'] == name:
-                    return [self.format_time_zone(time_zone)]
+                    return self.format_time_zone(time_zone)
 
             return None
 
@@ -288,9 +288,10 @@ else:
             """
 
             date_time_service_uri: str = self.get_manager_date_time_service_uri()
+
             payload: dict = dict(
                 TimeZone=dict(
-                    Index=index
+                    Index=int(index)
                 )
             )
 
