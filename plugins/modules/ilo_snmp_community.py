@@ -61,7 +61,7 @@ import traceback
 
 from ansible.module_utils.common.text.converters import to_native
 
-from ..module_utils.ilo_module import COMMON_ARGSPEC, iLOModule
+from ..module_utils.ilo_module import iLOModule
 from ..module_utils.ilo_module_error import iLOModuleError
 
 from typing import List, Optional
@@ -204,7 +204,8 @@ def run_module() -> None:
 
             result['changed'] = True
 
-            desired_communities: List[str] = current_communities.copy().append(name)
+            desired_communities: List[str] = current_communities.copy()
+            desired_communities.append(name)
             result['diff']['after']['communities'] = desired_communities
 
             if not module.check_mode:
