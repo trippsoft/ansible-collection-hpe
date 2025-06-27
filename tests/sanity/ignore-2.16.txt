@@ -8,6 +8,7 @@ plugins/modules/ilo_https_security_settings.py validate-modules:missing-gplv3-li
 plugins/modules/ilo_hostname.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_ipv4_dns_servers.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_ipv6_dns_servers.py validate-modules:missing-gplv3-license
+plugins/modules/ilo_ldap_settings.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_ntp_servers.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_snmp_community.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_snmp_config.py validate-modules:missing-gplv3-license
