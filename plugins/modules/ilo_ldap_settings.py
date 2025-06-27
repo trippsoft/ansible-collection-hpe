@@ -428,6 +428,11 @@ else:
 
                 ldap: dict = response.dict['LDAP']
 
+                if 'Oem' not in response.dict:
+                    self.handle_error(iLOModuleError(f'\'Oem\' not found in {account_service_uri}'))
+
+                oem: dict = response.dict['Oem']
+
                 if 'ServiceEnabled' not in ldap:
                     self.handle_error(iLOModuleError(f'\'LDAP.ServiceEnabled\' not found in {account_service_uri}'))
 
@@ -540,11 +545,6 @@ else:
                         ldap_search_bases=ldap_search_bases,
                         state=state
                     )
-
-                if 'Oem' not in response.dict:
-                    self.handle_error(iLOModuleError(f'\'Oem\' not found in {account_service_uri}'))
-
-                oem: dict = response.dict['Oem']
 
                 if 'Hpe' not in oem:
                     self.handle_error(iLOModuleError(f'\'Oem.Hpe\' not found in {account_service_uri}'))
