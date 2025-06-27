@@ -100,6 +100,21 @@ else:
                 except Exception as e:
                     self.fail_json(msg='Failed to logout from iLO', exception=to_native(e))
 
+        def get_account_service_uri(self) -> str:
+            """
+            Get the account service URI from the Redfish client.
+
+            Returns:
+                str: The account service URI.
+            """
+
+            if not self.client:
+                self.fail_json(msg='Redfish client is not initialized')
+
+            account_service_uri: str = '/redfish/v1/AccountService'
+
+            return account_service_uri
+
         def get_manager_uri(self) -> str:
             """
             Get the manager URI from the Redfish client.

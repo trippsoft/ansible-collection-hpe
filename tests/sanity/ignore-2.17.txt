@@ -1,4 +1,5 @@
 plugins/modules/ilo_https_certificate_info.py pylint:unused-import
+plugins/modules/ilo_account_settings.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_domain_name.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_https_certificate.py validate-modules:missing-gplv3-license
 plugins/modules/ilo_https_certificate_info.py validate-modules:missing-gplv3-license

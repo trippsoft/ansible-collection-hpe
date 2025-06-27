@@ -401,8 +401,8 @@ def run_module() -> None:
 
     if len(changes_needed) > 0:
         result['changed'] = True
-        result['diff']['after'] = changes_needed.copy()
-        result.update(changes_needed)
+        result['diff']['after'] = desired_settings.copy()
+        result.update(desired_settings)
 
         if not module.check_mode:
             module.apply_settings(changes_needed)
