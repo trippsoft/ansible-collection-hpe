@@ -680,7 +680,7 @@ else:
                         payload['Oem'] = dict(
                             Hpe=dict(
                                 DirectorySettings=dict(
-                                    LdapAuthenticationMode='StandardSchema'
+                                    LdapAuthenticationMode='DefaultSchema'
                                 )
                             )
                         )
