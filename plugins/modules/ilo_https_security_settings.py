@@ -5,7 +5,7 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 DOCUMENTATION = r"""
-module: ilo_https_settings
+module: ilo_https_security_settings
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
