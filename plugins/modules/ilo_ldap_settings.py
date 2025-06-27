@@ -628,10 +628,10 @@ else:
                         ldap['ServiceEnabled'] = False
                     elif changes_needed['state'] == 'active_directory':
                         ldap['ServiceEnabled'] = True
-                        ldap['DirectoryType'] = 'ActiveDirectoryService'
+                        ldap['AccountProviderType'] = 'ActiveDirectoryService'
                     elif changes_needed['state'] == 'generic_ldap':
                         ldap['ServiceEnabled'] = True
-                        ldap['DirectoryType'] = 'LDAPService'
+                        ldap['AccountProviderType'] = 'LDAPService'
 
                 if 'ldap_servers' in changes_needed:
 
