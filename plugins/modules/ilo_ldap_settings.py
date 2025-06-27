@@ -593,8 +593,8 @@ else:
                             changes_needed[key] = desired_settings[key]
                         else:
                             for i in range(len(desired_settings[key])):
-                                if (current_settings[key][i].address != desired_settings[key][i].address or
-                                        current_settings[key][i].port != desired_settings[key][i].port):
+                                if (current_settings[key][i]['address'] != desired_settings[key][i]['address'] or
+                                        current_settings[key][i]['port'] != desired_settings[key][i]['port']):
 
                                     changes_needed[key] = desired_settings[key]
 
