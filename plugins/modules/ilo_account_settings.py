@@ -111,6 +111,7 @@ from ansible.module_utils.common.text.converters import to_native
 
 from ..module_utils.ilo_module import iLOModule
 from ..module_utils.ilo_module_error import iLOModuleError
+
 from typing import Optional
 
 MODULE_INIT_ARGS: dict = dict(

@@ -145,7 +145,7 @@ else:
         HAS_CRYPTOGRAPHY: bool = False
         CRYPTOGRAPHY_IMPORT_ERROR: Optional[str] = traceback.format_exc()
 
-        # Stub class to allow ansible-test to run without Redfish
+        # Stub class to allow ansible-test to run without cryptography
         class iLOHTTPSCertificateModule(iLOModule):
             """
             Extends iLOModule to simplify the creation of iLO HTTPS certificate modules.
