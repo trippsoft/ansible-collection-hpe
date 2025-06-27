@@ -1,0 +1,11 @@
+---
+- name: Validate
+  ansible.builtin.import_tasks: validate.yml
+
+- name: Check certificate
+  ansible.builtin.import_tasks: check.yml
+
+- name: Generate certificate
+  when:
+    - _ilo_generate_cert
+  ansible.builtin.include_tasks: generate.yml

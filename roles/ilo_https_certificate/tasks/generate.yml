@@ -1,0 +1,31 @@
+---
+- name: Include role to generate certificate (custom)
+  when:
+    - ilo_certificate_type == 'custom'
+  ansible.builtin.include_role:
+    name: "{{ _ilo_certificate_role }}"
+
+- name: Include role to generate certificate (known role)
+  when:
+    - ilo_certificate_type != 'custom'
+  ansible.builtin.include_role:
+    name: "{{ _ilo_certificate_role }}"
+  vars:
+    cert_force_regenerate: true
+    cert_existing_certificate_type: pipe
+    cert_acme_intermediate_certificate_to_file: false
+    cert_acme_intermediate_certificate_to_variable: true
+    cert_private_key_to_file: false
+    cert_private_key_to_variable: true
+    cert_certificate_to_file: false
+    cert_certificate_to_variable: true
+
+- name: Import certificate
+  delegate_to: localhost
+  trippsc2.hpe.ilo_https_certificate:
+    base_url: "{{ ilo_base_url }}"
+    username: "{{ ilo_username }}"
+    password: "{{ ilo_password }}"
+    certificate: "{{ cert_certificate_content }}"
+    ca_bundle: "{{ cert_acme_intermediate_certificate_content | default(omit) }}"
+    private_key: "{{ cert_private_key_content }}"

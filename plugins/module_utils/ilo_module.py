@@ -316,6 +316,37 @@ else:
 
             return https_certificate['@odata.id']
 
+        def get_https_certificate_info(self) -> dict:
+            """
+            Retrieve the HTTPS certificate information from the iLO device.
+
+            Returns:
+                dict: The HTTPS certificate information.
+            """
+
+            https_certificate_uri: str = self.get_manager_security_https_cert_uri()
+
+            try:
+                response: RestResponse = self.client.get(https_certificate_uri)
+            except Exception as e:
+                self.handle_error(iLOModuleError(message=f'Error retrieving {https_certificate_uri}', exception=to_native(e)))
+
+            if response.status != 200:
+                self.handle_error(iLOModuleError(message=f'Failed to retrieve {https_certificate_uri}'))
+
+            if 'X509CertificateInformation' not in response.dict:
+                self.handle_error(iLOModuleError(message=f'\'X509CertificateInformation\' not found in {https_certificate_uri}'))
+
+            x509_certificate_info: dict = response.dict['X509CertificateInformation']
+
+            return dict(
+                issuer=x509_certificate_info['Issuer'],
+                serial_number=x509_certificate_info['SerialNumber'],
+                subject=x509_certificate_info['Subject'],
+                valid_not_after=x509_certificate_info['ValidNotAfter'],
+                valid_not_before=x509_certificate_info['ValidNotBefore']
+            )
+
         def get_https_cert_generate_csr_uri(self) -> str:
             """
             Get the HTTPS certificate generate CSR URI from the Redfish client.

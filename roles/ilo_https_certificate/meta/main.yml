@@ -1,0 +1,30 @@
+---
+galaxy_info:
+  author: Jim Tarpley (@trippsc2)
+  namespace: trippsc2
+  role_name: ilo_https_certificate
+  description: |
+    This role generates a new HTTPS Certificate for an HPE iLO, if an existing certificate doesn't exist or needs renewal.
+
+    This role will use another role to generate the private key, CSR, and certificate.
+
+    The role can be supplied by setting the `ilo_certificate_type` to an existing type or setting it to `custom` and supplying a role name through the `ilo_certificate_role` variable.
+
+    The role referenced must output an unencrypted private key in the `cert_private_key_content` variable and the certificate in the `cert_certificate_content` variable.
+
+  license: MIT
+
+  min_ansible_version: '2.16'
+
+  platforms: []
+
+allow_duplicates: true
+
+collections:
+  - ansible.utils
+  - netscaler.adc
+  - trippsc2.adcs
+  - trippsc2.general
+  - trippsc2.hashi_vault
+
+dependencies: []

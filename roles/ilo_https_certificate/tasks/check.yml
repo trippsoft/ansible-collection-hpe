@@ -1,0 +1,17 @@
+---
+- name: Get HTTPS certificate information from HPE iLO
+  delegate_to: localhost
+  trippsc2.hpe.ilo_https_certificate_info:
+    base_url: "{{ ilo_base_url }}"
+    username: "{{ ilo_username }}"
+    password: "{{ ilo_password }}"
+  register: _ilo_certificate
+
+- name: Get certificates with the expected name
+  ansible.builtin.set_fact:
+    _ilo_days_to_expiration: >-
+      {{ _ilo_certificate.certificate_info.valid_not_after | to_datetime('%Y-%m-%dT%H:%M:%SZ') | difference(now(), 'days') }}
+
+- name: Set create certificate variable
+  ansible.builtin.set_fact:
+    _ilo_generate_cert: "{{ _ilo_days_to_expiration | int <= ilo_certificate_regenerate_days }}"

@@ -30,18 +30,34 @@ EXAMPLES = r"""
 
 RETURN = r"""
 certificate_info:
-  type: raw
+  type: dict
   returned: always
   description:
     - The configured HTTPS certificate information for the iLO device.
+  contains:
+    issuer:
+      type: str
+      description:
+        - The issuer of the HTTPS certificate.
+    subject:
+      type: str
+      description:
+        - The subject of the HTTPS certificate.
+    valid_not_after:
+      type: str
+      description:
+        - The date and time after which the HTTPS certificate is no longer valid.
+        - This is in ISO 8601 format.
+    valid_not_before:
+      type: str
+      description:
+        - The date and time before which the HTTPS certificate is not valid.
+        - This is in ISO 8601 format.
 """
 
 import traceback
 
-from ansible.module_utils.common.text.converters import to_native
-
 from ..module_utils.ilo_module import iLOModule
-from ..module_utils.ilo_module_error import iLOModuleError
 
 from typing import Optional
 
@@ -51,7 +67,7 @@ MODULE_INIT_ARGS: dict = dict(
 )
 
 try:
-    from redfish.rest.containers import RestResponse
+    import redfish
 except ImportError:
     HAS_REDFISH: bool = False
     REDFISH_IMPORT_ERROR: Optional[str] = traceback.format_exc()
@@ -65,16 +81,6 @@ except ImportError:
         def __init__(self, *args, **kwargs) -> None:
             super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
 
-        def get_https_certificate_info(self) -> dict:
-            """
-            Retrieve the HTTPS certificate information from the iLO device.
-
-            Returns:
-                dict: The HTTPS certificate information.
-            """
-
-            pass
-
 else:
     HAS_REDFISH: bool = True
     REDFISH_IMPORT_ERROR: Optional[str] = None
@@ -86,29 +92,6 @@ else:
 
         def __init__(self, *args, **kwargs) -> None:
             super().__init__(*args, **MODULE_INIT_ARGS, **kwargs)
-
-        def get_https_certificate_info(self) -> dict:
-            """
-            Retrieve the HTTPS certificate information from the iLO device.
-
-            Returns:
-                dict: The HTTPS certificate information.
-            """
-
-            https_certificate_uri: str = self.get_manager_security_https_cert_uri()
-
-            try:
-                response: RestResponse = self.client.get(https_certificate_uri)
-            except Exception as e:
-                self.handle_error(iLOModuleError(message=f'Error retrieving {https_certificate_uri}', exception=to_native(e)))
-
-            if response.status != 200:
-                self.handle_error(iLOModuleError(message=f'Failed to retrieve {https_certificate_uri}'))
-
-            if 'X509CertificateInformation' not in response.dict:
-                self.handle_error(iLOModuleError(message=f'\'X509CertificateInformation\' not found in {https_certificate_uri}'))
-
-            return response.dict['X509CertificateInformation']
 
 
 def run_module() -> None:

@@ -1,0 +1,31 @@
+---
+- name: Validate that HPE iLO base URL is set to an IPv4 address or FQDN
+  ansible.builtin.assert:
+    that:
+      - ilo_base_url is ansible.utils.ipv4_address or
+        ilo_base_url is community.general.fqdn_valid
+    fail_msg: HPE iLO base URL must be set to an IPv4 address or FQDN.
+    success_msg: HPE iLO base URL is set to an IPv4 address or FQDN.
+
+- name: Validate that HPE iLO username is defined
+  ansible.builtin.assert:
+    that:
+      - ilo_username is defined
+    fail_msg: Either HPE iLO username or token must be defined.
+    success_msg: Either HPE iLO username or token are defined.
+
+- name: Validate that HPE iLO password is defined
+  ansible.builtin.assert:
+    that:
+      - ilo_password is defined
+    fail_msg: HPE iLO password must be defined.
+    success_msg: HPE iLO password is defined.
+
+- name: Validate that HPE iLO certificate role is defined when certificate type is custom
+  when:
+    - ilo_certificate_type == 'custom'
+  ansible.builtin.assert:
+    that:
+      - ilo_certificate_role is defined
+    fail_msg: HPE iLO certificate role must be defined when certificate type is custom.
+    success_msg: HPE iLO certificate role is defined when certificate type is custom.

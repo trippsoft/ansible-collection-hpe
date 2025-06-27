@@ -14,7 +14,11 @@ tags:
   - security
   - tools
 
-dependencies: {}
+dependencies:
+  ansible.utils: ">=2.5.0"
+  trippsc2.adcs: '>=1.4.0'
+  trippsc2.general: '>=2.9.0'
+  trippsc2.hashi_vault: '>=1.7.0'
 
 repository: https://github.com/trippsoft/ansible-collection-hpe.git
 

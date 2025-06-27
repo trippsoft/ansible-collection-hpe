@@ -1,0 +1,25 @@
+---
+name: Generate Role Docs
+'on':
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+    paths:
+      - galaxy.yml
+      - roles/ilo_https_certificate/.aar_doc.yml
+      - roles/ilo_https_certificate/README.md
+      - roles/ilo_https_certificate/meta/argument_specs.yml
+      - roles/ilo_https_certificate/meta/main.yml
+defaults:
+  run:
+    working-directory: 'trippsc2.hpe'
+jobs:
+  docs_ilo_https_certificate:
+    name: Generate ilo_https_certificate role documentation
+    permissions:
+      contents: write
+    uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
+    with:
+      working_directory: 'trippsc2.hpe'
+      role_name: 'ilo_https_certificate'

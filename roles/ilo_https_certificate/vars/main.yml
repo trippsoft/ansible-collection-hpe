@@ -1,0 +1,10 @@
+---
+_ilo_certificate_role: >-
+  {{ _ilo_known_roles[ilo_certificate_type] if ilo_certificate_type != 'custom' else
+     ilo_certificate_role }}
+
+_ilo_known_roles:
+  self_signed: trippsc2.general.self_signed_certificate
+  adcs_signed: trippsc2.adcs.signed_certificate
+  vault_signed: trippsc2.hashi_vault.signed_certificate
+  acme_dns_signed: trippsc2.general.acme_dns_certificate
