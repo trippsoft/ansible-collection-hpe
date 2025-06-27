@@ -415,8 +415,8 @@ else:
                 except Exception as e:
                     self.handle_error(iLOModuleError(f'Error retrieving {account_service_uri}', exception=to_native(e)))
 
-                if response.status not in [200, 201, 204]:
-                    self.handle_error(iLOModuleError(f'Failed to retrieve {account_service_uri}', exception=response.obj['error']['@Message.ExtendedInfo']))
+                if response.status != 200:
+                    self.handle_error(iLOModuleError(f'Failed to retrieve {account_service_uri}'))
 
                 if 'LocalAccountAuth' not in response.dict:
                     self.handle_error(iLOModuleError(f'\'LocalAccountAuth\' not found in {account_service_uri}'))
@@ -502,8 +502,8 @@ else:
                 except Exception as e:
                     self.handle_error(iLOModuleError(f'Error retrieving {certificates_uri}', exception=to_native(e)))
 
-                if response.status not in [200, 201, 204]:
-                    self.handle_error(iLOModuleError(f'Failed to retrieve {certificates_uri}', exception=response.obj['error']['@Message.ExtendedInfo']))
+                if response.status != 200:
+                    self.handle_error(iLOModuleError(f'Failed to retrieve {certificates_uri}'))
 
                 if 'Members' not in response.dict:
                     self.handle_error(iLOModuleError(f'\'Members\' not found in {certificates_uri}'))
@@ -523,8 +523,8 @@ else:
                     except Exception as e:
                         self.handle_error(iLOModuleError(f'Error retrieving {certificate_uri}', exception=to_native(e)))
 
-                    if response.status not in [200, 201, 204]:
-                        self.handle_error(iLOModuleError(f'Failed to retrieve {certificate_uri}', exception=response.obj['error']['@Message.ExtendedInfo']))
+                    if response.status != 200:
+                        self.handle_error(iLOModuleError(f'Failed to retrieve {certificate_uri}'))
 
                     if 'SerialNumber' not in response.dict:
                         self.handle_error(iLOModuleError(f'\'SerialNumber\' not found in {certificate_uri}'))
@@ -690,8 +690,8 @@ else:
                 except Exception as e:
                     self.handle_error(iLOModuleError('Error applying LDAP settings', exception=to_native(e)))
 
-                if response.status not in [200, 201, 204]:
-                    self.handle_error(iLOModuleError(f'Failed to apply LDAP settings.', exception=response.obj['error']['@Message.ExtendedInfo']))
+                if response.status != 200:
+                    self.handle_error(iLOModuleError('Failed to apply LDAP settings.'))
 
                 if 'ldap_ca_certificate_serial_number' not in changes_needed:
                     return
@@ -705,8 +705,8 @@ else:
                     except Exception as e:
                         self.handle_error(iLOModuleError(f'Error deleting {certificate_uri}', exception=to_native(e)))
 
-                    if response.status not in [200, 201, 204]:
-                        self.handle_error(iLOModuleError(f'Failed to delete {certificate_uri}', exception=response.obj['error']['@Message.ExtendedInfo']))
+                    if response.status != 200:
+                        self.handle_error(iLOModuleError(f'Failed to delete {certificate_uri}'))
 
                 ldap_ca_certificate: str = self.params['ldap_ca_certificate'] + '\n'
                 payload: dict = dict(CertificateString=ldap_ca_certificate)
@@ -716,8 +716,8 @@ else:
                 except Exception as e:
                     self.handle_error(iLOModuleError('Error updating LDAP CA certificate', exception=to_native(e)))
 
-                if response.status not in [200, 201, 204]:
-                    self.handle_error(iLOModuleError('Failed to update LDAP CA certificate', exception=response.obj['error']['@Message.ExtendedInfo']))
+                if response.status != 200:
+                    self.handle_error(iLOModuleError('Failed to update LDAP CA certificate'))
 
 
 from ansible.module_utils.basic import missing_required_lib
