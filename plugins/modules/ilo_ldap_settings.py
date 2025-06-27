@@ -210,7 +210,7 @@ MODULE_INIT_ARGS: dict = dict(
         ldap_password=dict(type='str', required=False, no_log=True),
         ldap_search_bases=dict(type='list', required=False, elements='str'),
         use_extended_schema=dict(type='bool', required=False, default=False),
-        update_password=dict(type='str', required=False, default='when_changed', choices=['when_changed', 'always']),
+        update_password=dict(type='str', required=False, default='when_changed', choices=['when_changed', 'always'], no_log=False),
         state=dict(type='str', required=True, choices=['active_directory', 'generic_ldap', 'disabled'])
     ),
     required_if=[
@@ -269,6 +269,17 @@ except ImportError:
             discard = current_settings
             discard = desired_settings
 
+        def apply_settings(self, changes_needed: dict, has_existing_cert: bool) -> None:
+            """
+            Apply the changes needed to the iLO device.
+
+            Args:
+                changes_needed (dict): The changes needed to apply the desired settings.
+            """
+
+            discard = changes_needed
+            discard = has_existing_cert
+
 else:
     HAS_REDFISH: bool = True
     REDFISH_IMPORT_ERROR: Optional[str] = None
@@ -322,6 +333,17 @@ else:
 
                 discard = current_settings
                 discard = desired_settings
+
+            def apply_settings(self, changes_needed: dict, has_existing_cert: bool) -> None:
+                """
+                Apply the changes needed to the iLO device.
+
+                Args:
+                    changes_needed (dict): The changes needed to apply the desired settings.
+                """
+
+                discard = changes_needed
+                discard = has_existing_cert
 
     else:
         HAS_CRYPTOGRAPHY: bool = True
@@ -393,8 +415,8 @@ else:
                 except Exception as e:
                     self.handle_error(iLOModuleError(f'Error retrieving {account_service_uri}', exception=to_native(e)))
 
-                if response.status != 200:
-                    self.handle_error(iLOModuleError(f'Failed to retrieve {account_service_uri}'))
+                if response.status not in [200, 201, 204]:
+                    self.handle_error(iLOModuleError(f'Failed to retrieve {account_service_uri}', exception=response.obj['error']['@Message.ExtendedInfo']))
 
                 if 'LocalAccountAuth' not in response.dict:
                     self.handle_error(iLOModuleError(f'\'LocalAccountAuth\' not found in {account_service_uri}'))
@@ -480,8 +502,8 @@ else:
                 except Exception as e:
                     self.handle_error(iLOModuleError(f'Error retrieving {certificates_uri}', exception=to_native(e)))
 
-                if response.status != 200:
-                    self.handle_error(iLOModuleError(f'Failed to retrieve {certificates_uri}'))
+                if response.status not in [200, 201, 204]:
+                    self.handle_error(iLOModuleError(f'Failed to retrieve {certificates_uri}', exception=response.obj['error']['@Message.ExtendedInfo']))
 
                 if 'Members' not in response.dict:
                     self.handle_error(iLOModuleError(f'\'Members\' not found in {certificates_uri}'))
@@ -501,8 +523,8 @@ else:
                     except Exception as e:
                         self.handle_error(iLOModuleError(f'Error retrieving {certificate_uri}', exception=to_native(e)))
 
-                    if response.status != 200:
-                        self.handle_error(iLOModuleError(f'Failed to retrieve {certificate_uri}'))
+                    if response.status not in [200, 201, 204]:
+                        self.handle_error(iLOModuleError(f'Failed to retrieve {certificate_uri}', exception=response.obj['error']['@Message.ExtendedInfo']))
 
                     if 'SerialNumber' not in response.dict:
                         self.handle_error(iLOModuleError(f'\'SerialNumber\' not found in {certificate_uri}'))
@@ -668,8 +690,8 @@ else:
                 except Exception as e:
                     self.handle_error(iLOModuleError('Error applying LDAP settings', exception=to_native(e)))
 
-                if response.status != 200:
-                    self.handle_error(iLOModuleError('Failed to apply LDAP settings'))
+                if response.status not in [200, 201, 204]:
+                    self.handle_error(iLOModuleError(f'Failed to apply LDAP settings.', exception=response.obj['error']['@Message.ExtendedInfo']))
 
                 if 'ldap_ca_certificate_serial_number' not in changes_needed:
                     return
@@ -683,8 +705,8 @@ else:
                     except Exception as e:
                         self.handle_error(iLOModuleError(f'Error deleting {certificate_uri}', exception=to_native(e)))
 
-                    if response.status != 200:
-                        self.handle_error(iLOModuleError(f'Failed to delete {certificate_uri}'))
+                    if response.status not in [200, 201, 204]:
+                        self.handle_error(iLOModuleError(f'Failed to delete {certificate_uri}', exception=response.obj['error']['@Message.ExtendedInfo']))
 
                 ldap_ca_certificate: str = self.params['ldap_ca_certificate'] + '\n'
                 payload: dict = dict(CertificateString=ldap_ca_certificate)
@@ -694,8 +716,8 @@ else:
                 except Exception as e:
                     self.handle_error(iLOModuleError('Error updating LDAP CA certificate', exception=to_native(e)))
 
-                if response.status != 200:
-                    self.handle_error(iLOModuleError('Failed to update LDAP CA certificate'))
+                if response.status not in [200, 201, 204]:
+                    self.handle_error(iLOModuleError('Failed to update LDAP CA certificate', exception=response.obj['error']['@Message.ExtendedInfo']))
 
 
 from ansible.module_utils.basic import missing_required_lib
