@@ -102,7 +102,7 @@ except ImportError:
     REDFISH_IMPORT_ERROR: Optional[str] = traceback.format_exc()
 
     # Stub class to allow ansible-test to run without Redfish
-    class iLONTPServersModule(iLOModule):
+    class iLONtpServersModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO NTP servers modules.
         """
@@ -146,7 +146,7 @@ else:
     HAS_REDFISH: bool = True
     REDFISH_IMPORT_ERROR: Optional[str] = None
 
-    class iLONTPServersModule(iLOModule):
+    class iLONtpServersModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO NTP servers modules.
         """
@@ -289,7 +289,7 @@ from ansible.module_utils.basic import missing_required_lib
 
 def run_module() -> None:
 
-    module: iLONTPServersModule = iLONTPServersModule()
+    module: iLONtpServersModule = iLONtpServersModule()
 
     if not HAS_REDFISH:
         module.fail_json(

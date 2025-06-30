@@ -109,7 +109,7 @@ except ImportError:
     REDFISH_IMPORT_ERROR: Optional[str] = traceback.format_exc()
 
     # Stub class to allow ansible-test to run without Redfish
-    class iLOHTTPSCertificateModule(iLOModule):
+    class iLOHttpsCertificateModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO HTTPS certificate modules.
         """
@@ -146,7 +146,7 @@ else:
         CRYPTOGRAPHY_IMPORT_ERROR: Optional[str] = traceback.format_exc()
 
         # Stub class to allow ansible-test to run without cryptography
-        class iLOHTTPSCertificateModule(iLOModule):
+        class iLOHttpsCertificateModule(iLOModule):
             """
             Extends iLOModule to simplify the creation of iLO HTTPS certificate modules.
             """
@@ -185,7 +185,7 @@ else:
         HAS_CRYPTOGRAPHY: bool = True
         CRYPTOGRAPHY_IMPORT_ERROR: Optional[str] = None
 
-        class iLOHTTPSCertificateModule(iLOModule):
+        class iLOHttpsCertificateModule(iLOModule):
             """
             Extends iLOModule to simplify the creation of iLO HTTPS certificate modules.
             """
@@ -263,7 +263,7 @@ from ansible.module_utils.basic import missing_required_lib
 
 def run_module() -> None:
 
-    module: iLOHTTPSCertificateModule = iLOHTTPSCertificateModule()
+    module: iLOHttpsCertificateModule = iLOHttpsCertificateModule()
 
     if not HAS_REDFISH:
         module.fail_json(

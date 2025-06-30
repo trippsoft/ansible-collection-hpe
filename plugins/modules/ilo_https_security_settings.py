@@ -9,7 +9,7 @@ module: ilo_https_security_settings
 version_added: 1.0.0
 author:
   - Jim Tarpley (@trippsc2)
-short_description: Configures iLO HTTPS settings
+short_description: Configures iLO HTTPS security settings
 description:
   - >-
     This module configures the HTTPS settings for an HPE iLO device.
@@ -137,7 +137,7 @@ except ImportError:
     HAS_REDFISH: bool = False
     REDFISH_IMPORT_ERROR: Optional[str] = traceback.format_exc()
 
-    class iLOSecuritySettingsModule(iLOModule):
+    class iLOHttpsSecuritySettingsModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO security settings modules.
         """
@@ -194,7 +194,7 @@ else:
     HAS_REDFISH: bool = True
     REDFISH_IMPORT_ERROR: Optional[str] = None
 
-    class iLOSecuritySettingsModule(iLOModule):
+    class iLOHttpsSecuritySettingsModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO security settings modules.
         """
@@ -376,7 +376,7 @@ from ansible.module_utils.basic import missing_required_lib
 
 def run_module() -> None:
 
-    module: iLOSecuritySettingsModule = iLOSecuritySettingsModule()
+    module: iLOHttpsSecuritySettingsModule = iLOHttpsSecuritySettingsModule()
 
     if not HAS_REDFISH:
         module.fail_json(

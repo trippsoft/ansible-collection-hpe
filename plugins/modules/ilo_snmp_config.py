@@ -259,7 +259,7 @@ except ImportError:
     HAS_REDFISH: bool = False
     REDFISH_IMPORT_ERROR: Optional[str] = traceback.format_exc()
 
-    class iLOSNMPConfigModule(iLOModule):
+    class iLOSnmpConfigModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO SNMP configuration modules.
         """
@@ -318,7 +318,7 @@ else:
     HAS_REDFISH: bool = True
     REDFISH_IMPORT_ERROR: Optional[str] = None
 
-    class iLOSNMPConfigModule(iLOModule):
+    class iLOSnmpConfigModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO SNMP configuration modules.
         """
@@ -542,7 +542,7 @@ from ansible.module_utils.basic import missing_required_lib
 
 def run_module() -> None:
 
-    module: iLOSNMPConfigModule = iLOSNMPConfigModule()
+    module: iLOSnmpConfigModule = iLOSnmpConfigModule()
 
     if not HAS_REDFISH:
         module.fail_json(

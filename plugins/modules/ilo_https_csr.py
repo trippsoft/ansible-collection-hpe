@@ -116,7 +116,7 @@ except ImportError:
     HAS_REDFISH: bool = False
     REDFISH_IMPORT_ERROR: Optional[str] = traceback.format_exc()
 
-    class iLOHTTPSCSRModule(iLOModule):
+    class iLOHttpsCsrModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO HTTPS CSR modules.
         """
@@ -158,7 +158,7 @@ else:
     HAS_REDFISH: bool = True
     REDFISH_IMPORT_ERROR: Optional[str] = None
 
-    class iLOHTTPSCSRModule(iLOModule):
+    class iLOHttpsCsrModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO HTTPS CSR modules.
         """
@@ -249,7 +249,7 @@ from ansible.module_utils.basic import missing_required_lib
 
 def run_module() -> None:
 
-    module: iLOHTTPSCSRModule = iLOHTTPSCSRModule()
+    module: iLOHttpsCsrModule = iLOHttpsCsrModule()
 
     if not HAS_REDFISH:
         module.fail_json(

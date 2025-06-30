@@ -73,7 +73,7 @@ except ImportError:
     REDFISH_IMPORT_ERROR: Optional[str] = traceback.format_exc()
 
     # Stub class to allow ansible-test to run without Redfish
-    class iLOHTTPSCertificateInfoModule(iLOModule):
+    class iLOHttpsCertificateInfoModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO HTTPS certificate info modules.
         """
@@ -85,7 +85,7 @@ else:
     HAS_REDFISH: bool = True
     REDFISH_IMPORT_ERROR: Optional[str] = None
 
-    class iLOHTTPSCertificateInfoModule(iLOModule):
+    class iLOHttpsCertificateInfoModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO HTTPS certificate info modules.
         """
@@ -96,7 +96,7 @@ else:
 
 def run_module() -> None:
 
-    module: iLOHTTPSCertificateInfoModule = iLOHTTPSCertificateInfoModule()
+    module: iLOHttpsCertificateInfoModule = iLOHttpsCertificateInfoModule()
 
     if not HAS_REDFISH:
         module.fail_json(

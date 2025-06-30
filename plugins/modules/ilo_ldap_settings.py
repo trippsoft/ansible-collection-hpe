@@ -226,7 +226,7 @@ except ImportError:
     HAS_REDFISH: bool = False
     REDFISH_IMPORT_ERROR: Optional[str] = traceback.format_exc()
 
-    class iLOAccountSettingsModule(iLOModule):
+    class iLOLdapSettingsModule(iLOModule):
         """
         Extends iLOModule to simplify the creation of iLO security settings modules.
         """
@@ -291,7 +291,7 @@ else:
         HAS_CRYPTOGRAPHY: bool = False
         CRYPTOGRAPHY_IMPORT_ERROR: Optional[str] = traceback.format_exc()
 
-        class iLOAccountSettingsModule(iLOModule):
+        class iLOLdapSettingsModule(iLOModule):
             """
             Extends iLOModule to simplify the creation of iLO security settings modules.
             """
@@ -349,7 +349,7 @@ else:
         HAS_CRYPTOGRAPHY: bool = True
         CRYPTOGRAPHY_IMPORT_ERROR: Optional[str] = None
 
-        class iLOAccountSettingsModule(iLOModule):
+        class iLOLdapSettingsModule(iLOModule):
             """
             Extends iLOModule to simplify the creation of iLO security settings modules.
             """
@@ -725,7 +725,7 @@ from ansible.module_utils.basic import missing_required_lib
 
 def run_module() -> None:
 
-    module: iLOAccountSettingsModule = iLOAccountSettingsModule()
+    module: iLOLdapSettingsModule = iLOLdapSettingsModule()
 
     if not HAS_REDFISH:
         module.fail_json(
