@@ -18,16 +18,19 @@ extends_documentation_fragment:
   - trippsc2.hpe.check_mode
   - trippsc2.hpe.common
 options:
-  local_role:
-    type: str
-    required: true
-    description:
-      - The local role to map to the LDAP group.
   ldap_group:
     type: str
     required: true
     description:
       - The LDAP group to map to the local role.
+  local_role:
+    type: str
+    required: false
+    description:
+      - The local role whose permissions are granted to the LDAP group.
+      - This is only used when creating the mapping.
+      - If O(state=present), this is required.
+      - If O(state=absent), this should not be provided.
   state:
     type: str
     required: false
@@ -67,14 +70,14 @@ ldap_remote_role_mappings:
   description:
     - The LDAP remote role mappings configured on the iLO device.
   contains:
-    local_role:
-      type: str
-      description:
-        - The local role mapped to the LDAP group.
     ldap_group:
       type: str
       description:
         - The LDAP group mapped to the local role.
+    local_role:
+      type: str
+      description:
+        - The local role mapped to the LDAP group.
 """
 
 import traceback
@@ -88,10 +91,13 @@ from typing import List, Optional
 
 MODULE_INIT_ARGS: dict = dict(
     argument_spec=dict(
-        local_role=dict(type='str', required=True),
         ldap_group=dict(type='str', required=True),
+        local_role=dict(type='str', required=False),
         state=dict(type='str', required=False, default='present', choices=['present', 'absent'])
     ),
+    required_if=[
+        ('state', 'present', ['local_role'])
+    ],
     supports_check_mode=True
 )
 
@@ -191,7 +197,7 @@ else:
             ldap: dict = response.dict['LDAP']
 
             if 'RemoteRoleMapping' not in ldap:
-                self.handle_error(iLOModuleError(message=f'\'LDAP.RemoteRoleMapping\' not found in {account_service_uri}'))
+                return []
 
             remote_role_mappings: List[dict] = ldap['RemoteRoleMapping']
 
@@ -242,9 +248,12 @@ def run_module() -> None:
             exception=REDFISH_IMPORT_ERROR
         )
 
-    local_role: str = module.params['local_role']
     ldap_group: str = module.params['ldap_group']
+    local_role: Optional[str] = module.params.get('local_role', None)
     state: str = module.params['state']
+
+    if state == 'absent' and local_role is not None:
+        module.fail_json(msg='When state is absent, local_role must not be provided.')
 
     module.initialize_client()
 
@@ -260,7 +269,7 @@ def run_module() -> None:
     matching_mapping: Optional[dict] = None
 
     for mapping in mappings:
-        if mapping['local_role'] == local_role and mapping['ldap_group'] == ldap_group:
+        if mapping['ldap_group'] == ldap_group:
             matching_mapping = mapping
             break
 
@@ -294,10 +303,21 @@ def run_module() -> None:
 
             result['changed'] = True
             result['diff']['after']['ldap_remote_role_mappings'] = mappings.copy()
-            result['ldap_remote_role_mappings'] = result['diff']['after']['ldap_remote_role_mappings']
 
             if not module.check_mode:
+
                 module.configure_ldap_remote_role_mappings(mappings)
+
+                mappings = module.get_ldap_remote_role_mappings()
+
+                for mapping in mappings:
+                    if mapping['ldap_group'] == ldap_group:
+                        matching_mapping = mapping
+                        break
+
+                result['diff']['after']['ldap_remote_role_mappings'] = matching_mapping
+
+            result['ldap_remote_role_mappings'] = result['diff']['after']['ldap_remote_role_mappings']
 
         else:
             result['diff']['after']['ldap_remote_role_mappings'] = mappings.copy()

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1] - 2025-06-30
+
+### Module plugin - ilo_ldap_remote_role_mapping
+
+- Fixed many issues with this module.
+
 ## [1.0.0] - 2025-06-30
 
 ### Collection
