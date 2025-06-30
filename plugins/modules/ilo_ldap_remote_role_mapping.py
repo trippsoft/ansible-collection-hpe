@@ -63,9 +63,9 @@ EXAMPLES = r"""
 """
 
 RETURN = r"""
-ldap_remote_role_mappings:
+ldap_remote_role_mapping:
   type: list
-  returned: always
+  returned: O(state=present)
   elements: dict
   description:
     - The LDAP remote role mappings configured on the iLO device.
@@ -76,6 +76,7 @@ ldap_remote_role_mappings:
         - The LDAP group mapped to the local role.
     local_role:
       type: str
+      returned: Not changed or Not check mode
       description:
         - The local role mapped to the LDAP group.
 """
@@ -281,14 +282,12 @@ def run_module() -> None:
 
             result['changed'] = True
             result['diff']['after']['ldap_remote_role_mappings'] = mappings.copy()
-            result['ldap_remote_role_mappings'] = result['diff']['after']['ldap_remote_role_mappings']
 
             if not module.check_mode:
                 module.configure_ldap_remote_role_mappings(mappings)
 
         else:
             result['diff']['after']['ldap_remote_role_mappings'] = mappings.copy()
-            result['ldap_remote_role_mappings'] = result['diff']['after']['ldap_remote_role_mappings']
 
     elif state == 'present':
 
@@ -303,6 +302,7 @@ def run_module() -> None:
 
             result['changed'] = True
             result['diff']['after']['ldap_remote_role_mappings'] = mappings.copy()
+            result['ldap_remote_role_mapping'] = dict(ldap_group=ldap_group)
 
             if not module.check_mode:
 
@@ -315,13 +315,15 @@ def run_module() -> None:
                         matching_mapping = mapping
                         break
 
-                result['diff']['after']['ldap_remote_role_mappings'] = matching_mapping
-
-            result['ldap_remote_role_mappings'] = result['diff']['after']['ldap_remote_role_mappings']
+                result['diff']['after']['ldap_remote_role_mappings'] = mappings.copy()
+                result['ldap_remote_role_mapping']['local_role'] = matching_mapping['local_role']
 
         else:
             result['diff']['after']['ldap_remote_role_mappings'] = mappings.copy()
-            result['ldap_remote_role_mappings'] = result['diff']['after']['ldap_remote_role_mappings']
+            result['ldap_remote_role_mapping'] = dict(
+                ldap_group=matching_mapping['ldap_group'],
+                local_role=matching_mapping['local_role']
+            )
 
     else:
         module.handle_error(iLOModuleError(message=f'Invalid state: {state}. Must be one of: present, absent'))
