@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.hpe.ilo_https_certificate
-Version: 1.0.0
+Version: 1.0.1
 
 This role generates a new HTTPS Certificate for an HPE iLO, if an existing certificate doesn't exist or needs renewal.
 
