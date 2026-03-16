@@ -43,7 +43,7 @@ jobs:
           - '2.16'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: 'collections/ansible_collections/trippsc2/hpe'
       - name: Run ansible-test sanity tests
