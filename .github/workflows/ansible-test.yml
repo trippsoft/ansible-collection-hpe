@@ -1,5 +1,5 @@
 ---
-name: ansible-test
+name: Run ansible-test sanity tests
 'on':
   workflow_call: {}
   workflow_dispatch: {}
@@ -28,7 +28,7 @@ defaults:
     working-directory: 'collections/ansible_collections/trippsc2/hpe'
 jobs:
   sanity:
-    name: Run ansible-test
+    name: Run ansible-test sanity tests
     runs-on:
       - self-hosted
       - linux
